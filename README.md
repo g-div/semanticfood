@@ -11,13 +11,14 @@ You will need the following software installed:
 - [Python 3](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/)
 
-1. Clone the repo:
-
+- **Clone the repo**:
+```
 	git clone https://github.com/g-div/semanticfood
-
-2. Install the dependencies
-
+```
+- **Install the dependencies**:
+```
 	pip install -r requirements.txt
+```
 
 Get Started
 ===========
