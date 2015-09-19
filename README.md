@@ -34,7 +34,7 @@ Get Started
 Documentation
 =============
 
-The documentation is available at [http://sphinx-doc.org/https://semanticfood.readthedocs.org](https://semanticfood.readthedocs.org).
+The documentation is available at [https://semantic-food.readthedocs.org](https://semantic-food.readthedocs.org).
 
 The source is located in the [docs](https://github.com/g-div/semanticfood/tree/master/docs) folder and can be built using [Sphinx](http://sphinx-doc.org/):
 
