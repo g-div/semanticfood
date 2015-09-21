@@ -11,25 +11,20 @@ You will need the following software installed:
 - [Python 3](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/)
 
-### Development
-
-- **Clone the repo**:
 ```
-git clone https://github.com/g-div/semanticfood
-```
-- **Install the dependencies**:
-```
-pip install -r requirements.txt
-```
-
-### Stable
-```
-pip install semanticfood
+pip install git+https://github.com/g-div/semanticfood
 ```
 
 Get Started
 ===========
 
+Run:
+
+```
+semanticfood
+```
+
+This will start the [Flask](http://flask.pocoo.org/)-based server on port 5000.
 
 Documentation
 =============
