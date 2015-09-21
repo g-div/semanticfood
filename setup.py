@@ -3,11 +3,15 @@ from codecs import open
 from os import path
 from pip.req import parse_requirements
 
-requirements = [str(requirement.req) for requirement in parse_requirements('requirements.txt')]
+readme = 'README.md'
+
+requirements_file = 'requirements.txt'
+
+requirements = [str(requirement.req) for requirement in parse_requirements(requirements_file)]
 
 packages = find_packages()
 
-with open('README.rst', 'r', 'utf-8') as f:
+with open(readme, 'r', 'utf-8') as f:
     readme = f.read()
 
 setup(
@@ -47,7 +51,7 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
-    package_data={'': ['README.md', 'requirements.txt']},
+    package_data={'': [readme, requirements_file]},
     # package_data={
     #     'sample': ['package_data.dat'],
     # },
