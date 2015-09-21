@@ -11,23 +11,30 @@ You will need the following software installed:
 - [Python 3](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/)
 
-1. Clone the repo:
+### Development
 
-	git clone https://github.com/g-div/semanticfood
+- **Clone the repo**:
+```
+git clone https://github.com/g-div/semanticfood
+```
+- **Install the dependencies**:
+```
+pip install -r requirements.txt
+```
 
-2. Install the dependencies
-
-	pip install -r requirements.txt
+### Stable
+```
+pip install semanticfood
+```
 
 Get Started
 ===========
 
-...
 
 Documentation
 =============
 
-The documentation is available at [http://sphinx-doc.org/https://semanticfood.readthedocs.org](https://semanticfood.readthedocs.org).
+The documentation is available at [https://semantic-food.readthedocs.org](https://semantic-food.readthedocs.org).
 
 The source is located in the [docs](https://github.com/g-div/semanticfood/tree/master/docs) folder and can be built using [Sphinx](http://sphinx-doc.org/):
 
