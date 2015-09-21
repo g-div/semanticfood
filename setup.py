@@ -1,10 +1,11 @@
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
+from pip.req import parse_requirements
 
-requirements = []
+requirements = [str(requirement.req) for requirement in parse_requirements('requirements.txt')]
 
-packages = []
+packages = find_packages()
 
 with open('README.rst', 'r', 'utf-8') as f:
     readme = f.read()
