@@ -3,22 +3,22 @@ Semantic Food
 
 Semantic Food is a web-platform to store, search and share cooking recipes semantically.
 
-Installation
-============
+
+Get Started
+===========
 
 ### Pre-requirements:
 You will need the following software installed:
 - [Python 3](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/)
 
+### Installation:
+
 ```
 pip install git+https://github.com/g-div/semanticfood
 ```
 
-Get Started
-===========
-
-Run:
+### Run:
 
 ```
 semanticfood
