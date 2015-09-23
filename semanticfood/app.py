@@ -1,26 +1,23 @@
-import rdflib
+"""
+    SemanticFood
+    ~~~~~~~~~~~~
+
+    Semantic Food is a web-platform to store,
+    search and share cooking recipes semantically.
+
+    The back-end is written in python and it uses Flask.
+"""
+
 from flask import Flask
-from flask_negotiate import produces
+from endpoints.recipe import recipe
+from endpoints.semantic import semantic
 
 app = Flask(__name__)
 
-graph = rdflib.Graph()
+app.config.from_pyfile('config.py')
 
-
-@app.route("/n3/")
-@produces('application/json+ld')
-def n3():
-    graph.parse('https://raw.githubusercontent.com/norcalrdf/pymantic/master/examples/foaf-bond.ttl', format='n3')
-
-    return graph.serialize(format='json-ld')
-
-
-@app.route("/rdfa/")
-@produces('application/json+ld')
-def rdfa():
-    graph.parse('http://cooking.nytimes.com/recipes/1017696-mushroom-mille-feuille-with-tomato-coulis')
-
-    return graph.serialize(format='json-ld')
+app.register_blueprint(recipe, url_prefix='/recipes')
+app.register_blueprint(semantic, url_prefix='/semantic')
 
 
 def main():
