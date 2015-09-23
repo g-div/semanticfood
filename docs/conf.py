@@ -17,10 +17,12 @@ import sys
 import os
 import shlex
 
+name = 'semanticfood'
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.join(os.path.abspath('..'), name))
 
 # -- General configuration ------------------------------------------------
 
@@ -31,7 +33,7 @@ import shlex
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
+    'sphinx.ext.autodoc'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -257,7 +259,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'semanticfood', 'Semantic Food Documentation',
+    (master_doc, name, 'Semantic Food Documentation',
      [author], 1)
 ]
 
