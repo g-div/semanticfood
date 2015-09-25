@@ -13,8 +13,7 @@ def get():
     return render_template('recipes.html', recipes=recipes)
 
 
-@recipe.route('/<id>')
+@recipe.route('/<int:id>')
 @produces('text/html')
 def getById(id):
-    id = int(id)
     return render_template('recipe.html', recipe=recipes[id])
