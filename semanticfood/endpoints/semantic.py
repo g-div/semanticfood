@@ -18,7 +18,7 @@ def n3():
 
 
 @semantic.route("/rdfa/")
-@produces('application/json+ld')
+@produces('application/rdf+xml')
 def rdfa():
     """Read RDF/XML file and serialize it to JSON-LD"""
 
