@@ -1,27 +1,20 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
+from flask_negotiate import produces
 
 recipe = Blueprint('recipe', __name__)
 
-recipes = {'as234blter89324': 'blabla', '35kjb09dsf23ml489': 'zaza'}
+recipes = [{'name': 'Pizza', 'ingredients': ['Flour', 'Water', 'Yeast']}]
 
 
 @recipe.route('/')
+@produces('text/html')
 def get():
     """ GET / List all recipes"""
-    return recipes
+    return render_template('recipes.html', recipes=recipes)
 
 
 @recipe.route('/<id>')
+@produces('text/html')
 def getById(id):
-    return recipes[id]
-
-
-@recipe.route('/<id>')
-def update(id):
-    recipes.update({})
-    return recipes[id]
-
-
-@recipe.route('/<id>')
-def delete(id):
-    return recipes[id]
+    id = int(id)
+    return render_template('recipe.html', recipe=recipes[id])

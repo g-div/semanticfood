@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>SemanticFood</title>
+</head>
+
+<body>
+	<h1>SemanticFood</h1>
+
+	<ul id="recipes">
+	{% for recipe in recipes %}
+		<li class="recipe"><a href="{{ recipes.index(recipe) }}">{{ recipe.name }}</a></li>
+	{% endfor %}
+	</ul>
+
+</body>
+
+</html>
