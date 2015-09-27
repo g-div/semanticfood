@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>{{ recipe.name }} - SemanticFood</title>
+</head>
+
+<body>
+
+	<div itemscope itemtype="http://schema.org/Recipe">
+		<h1 itemprop="name">{{ recipe.name }}</h1>
+		By <span itemprop="author">{{ recipe.author }}</span>,
+		<meta itemprop="datePublished" content="{{ recipe.datePublished }}">{{ recipe.datePublished }}
+		<span itemprop="description">{{ recipe.description }}</span>
+			Prep Time: <meta itemprop="prepTime" content="{{ recipe.prepTime }}">{{ recipe.prepTime }}
+			Cook time: <meta itemprop="cookTime" content="{{ recipe.cookTime }}">{{ recipe.cookTime }}
+			Yield: <span itemprop="recipeYield">{{ recipe.serving }}</span>
+			<div itemprop="nutrition"
+			itemscope itemtype="http://schema.org/NutritionInformation">
+			Nutrition facts:
+			<span itemprop="calories">{{ recipe.cal }} calories</span>,
+			<span itemprop="fatContent">{{ recipe.fat }} grams fat</span>
+		</div>
+		Ingredients:
+		<ul id="ingredients">
+		{% for ingredient in recipe.ingredients %}
+			<li class="ingredient" itemprop="recipeIngredient">{{ ingredient }}</li>
+		{% endfor %}
+		</ul>
+		Instructions:
+		<span itemprop="recipeInstructions">
+			{{ recipe.instructions }}
+		</span>
+
+	</div>
+
+</body>
+
+</html>
+
