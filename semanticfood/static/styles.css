@@ -40,6 +40,10 @@ html, body {
     width: 100%;
 }
 
+#create-form #submit-button {
+    margin-top: 25px !important;
+}
+
 #create-form .add-button:hover, #create-form .step-remove:hover {
     background-color: #238C00;
 }
