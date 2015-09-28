@@ -21,10 +21,9 @@ graph = Graph(store, config.GRAPH_NAME)
 def get():
     """ GET / List all recipes"""
     recipes = []
-    for subject, predicate, obj in graph:
-        if (subject, predicate, obj) in graph:
-            recipes.append({'uri': subject,
-                            'name': subject.split('/')[-1:][0]})
+    for subject, predicate, obj in graph.triples((None, RDF.type,
+                                                  FOOD.Recipe)):
+        recipes.append({'uri': subject, 'name': subject.split('/')[-1:][0]})
     return render_template('recipe/recipes.html', recipes=recipes)
 
 
@@ -39,15 +38,24 @@ def negotiate(id):
 @recipe.route('/<id>.html')
 @produces('text/html')
 def getHTMLRecipe(id):
-    # TODO: read id and render page
-    return render_template('recipe/recipe.html',
-                           recipe=recipes[id])
+    result = {}
+    entry = URIRef(request.url.replace('.html', ''))
+    for subject, predicate, obj in graph.triples((entry, None, None)):
+        result[predicate] = obj
+        # TODO: adapt object to templates
+    return render_template('recipe/recipe.html', recipe=result)
 
 
 @recipe.route('/<id>.jsonld')
 @produces('application/json+ld')
 def getJSONLDRecipe(id):
-    # TODO: read id instead of the complete graph
+    tmpGraph = Graph()
+    entry = URIRef(request.url.replace('.jsonld', ''))
+    print(entry)
+    for subject, predicate, obj in graph.triples((entry, None, None)):
+        print((subject, predicate, obj))
+        tmpGraph.add((subject, predicate, obj))
+
     return graph.serialize(format='json-ld')
 
 
