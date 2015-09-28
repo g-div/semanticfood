@@ -39,6 +39,7 @@ def negotiate(id):
 @produces('text/html')
 def getHTMLRecipe(id):
     result = {}
+
     entry = URIRef(request.url.replace('.html', ''))
     for subject, predicate, obj in graph.triples((entry, None, None)):
         result[predicate] = obj
