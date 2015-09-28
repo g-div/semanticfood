@@ -2,24 +2,30 @@
 <html lang="en">
 <head>
 	<title>Add a new recipe - SemanticFood</title>
-	<script type=text/javascript src="{{ url_for('static', filename='script.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='create.js') }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 </head>
 
 <body>
+<div id="wrapper">
 	<h1>Your recipe:</h1>
-
-	<form method="POST" action="">
-	    <div>{{ form.name.label }}: {{ form.name() }}</div>
-	    <div>{{ form.description.label }}: {{ form.description() }}</div>
-	    <div>{{ form.prepTime.label }}: {{ form.prepTime() }}</div>
-	    <div>{{ form.cookTime.label }}: {{ form.cookTime() }}</div>
-	    <div>{{ form.serving.label }}: {{ form.serving() }}</div>
-	    <div>{{ form.ingredient() }}</div>
-	    <div>{{ form.instructions.label }}: {{ form.instructions() }}</div>
-	    <div>{{ form.submit.label }}: {{ form.submit() }}</div>
+	<form id="create-form" method="POST" action="">
+	    <div><input id="name" type="text" placeholder="Recipe Name" name="name"></div>
+	    <div><textarea id="description" placeholder="Description" name="description"></textarea></div>
+	    <div><input id="prepTime" type="number" placeholder="Preparation Time (Minutes)" name="prepTime"></div>
+	    <div><input id="cookTime" type="number" placeholder="Cooking Time (Minutes)" name="cookTime"></div>
+        <div><input id="servings" type="number" placeholder="Servings" name="servings"></div>
+	    <div><textarea id="instruction-step-0" placeholder="Describe the first step" name="instruction-step-0"></textarea></div>
+        <div><button class="add-button" id="add-instruction">Add Step</button></div>
+        <div><h3>Ingredients</h3></div>
+        <div>
+            <select id="ingredient-0" name="ingredient-0">
+            </select>
+        </div>
 	</form>
-
+</div>
 </body>
-
 </html>
-

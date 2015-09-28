@@ -1,0 +1,74 @@
+html, body {
+    background-color: #F6F5F2;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#wrapper {
+    margin: 0 auto 200px;
+    width: 600px;
+}
+
+#create-form > div {
+    margin: 10px 0 0;
+    width: 500px;
+}
+
+#create-form input, #create-form textarea {
+    background-color: #fcfcfc;
+    border: 3px solid rgba(0, 0, 0, 0);
+    border-radius: 0;
+    box-sizing: border-box;
+    color: #3c3c3c;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    margin-bottom: 10px;
+    padding: 13px 13px 13px 54px;
+    width: 100%;
+}
+
+#create-form .add-button {
+    background-color: #46a825;
+    border: 4px solid #fbfbfb;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    margin: -5px 0 0;
+    padding: 10px 0;
+    transition: all 0.4s ease 0s;
+    width: 100%;
+}
+
+#create-form .add-button:hover, #create-form .step-remove:hover {
+    background-color: #238C00;
+}
+
+#create-form input:focus, #create-form textarea:focus {
+    background: #fff none repeat scroll 0 0;
+    border: 3px solid #a1d490;
+    color: #46A825;
+    outline: medium none;
+    padding: 13px 13px 13px 54px;
+}
+
+#create-form textarea {
+    resize: vertical;
+}
+
+#create-form select {
+    width: 100%;
+}
+
+#create-form .step-remove {
+    background-color: #46a825;
+    border: 4px solid #fbfbfb;
+    color: #fff;
+    font-size: 20px;
+    height: 45px;
+    margin: 25px 0 0 20px;
+    padding: 5px 0;
+    position: absolute;
+    transition: all 0.4s ease 0s;
+    width: 50px;
+}
