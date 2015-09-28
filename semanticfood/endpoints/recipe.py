@@ -70,7 +70,7 @@ def create():
                                                        form.name.data)))
 
         # TODO: add other fields to the graph
-        graph.remove((entry, RDF.type, FOOD.Recipe))
+        graph.add((entry, RDF.type, FOOD.Recipe))
         graph.commit()
 
         return redirect(url_for('recipe.get'))
