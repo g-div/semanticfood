@@ -62,6 +62,7 @@ def getJSONLDRecipe(id):
 @produces('text/html')
 def create():
     form = RecipeForms(request.form)
+
     if request.method == 'POST' and form.validate():
         entry = URIRef(uricompose(scheme='http',
                                   host=config.HOST,
@@ -74,4 +75,6 @@ def create():
         graph.commit()
 
         return redirect(url_for('recipe.get'))
+    elif request.method == 'POST' and not form.validate():
+        print(form.errors)
     return render_template('recipe/create.html', form=form)

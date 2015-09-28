@@ -13,17 +13,18 @@
 <div id="wrapper">
 	<h1>Your recipe:</h1>
 	<form id="create-form" method="POST" action="">
-	    <div><input id="name" type="text" placeholder="Recipe Name" name="name"></div>
-	    <div><textarea id="description" placeholder="Description" name="description"></textarea></div>
-	    <div><input id="prepTime" type="number" placeholder="Preparation Time (Minutes)" name="prepTime"></div>
-	    <div><input id="cookTime" type="number" placeholder="Cooking Time (Minutes)" name="cookTime"></div>
-        <div><input id="servings" type="number" placeholder="Servings" name="servings"></div>
-	    <div><textarea id="instruction-step-0" placeholder="Describe the first step" name="instruction-step-0"></textarea></div>
+	    <div><input id="name" type="text" placeholder="{{ form.name.description }}" name="name"></div>
+	    <div><textarea id="description" placeholder="{{ form.description.description }}" name="description"></textarea></div>
+	    <div><input id="prepTime" type="number" placeholder="{{ form.prepTime.description }}" name="prepTime"></div>
+	    <div><input id="cookTime" type="number" placeholder="{{ form.cookTime.description }}" name="cookTime"></div>
+        <div><input id="servings" type="number" placeholder="{{ form.servings.description }}" name="servings"></div>
+	    <div><textarea id="instructionStep-0" placeholder="Describe the first step" name="instructionStep-0"></textarea></div>
         <div><button class="add-button" id="add-instruction">Add Step</button></div>
-        <div><h3>Ingredients</h3></div>
+        <div><h3>{{ form.ingredient.description }}</h3></div>
         <div><select id="ingredient-0" name="ingredient-0"></select></div>
-        <div><button class="add-button" id="submit-button">Submit Recipe</button></div>
+        <div><button class="add-button" id="submit-button" type="submit">Submit Recipe</button></div>
 	</form>
+	<div>{{ form.errors if form.errors }}</div>
 </div>
 </body>
 </html>
