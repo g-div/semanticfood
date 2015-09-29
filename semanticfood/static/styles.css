@@ -28,6 +28,16 @@ html, body {
     width: 100%;
 }
 
+#create-form .qtyinput {
+    width: 45% !important;
+}
+
+#create-form  .qty-type-select {
+    position: relative;
+    right: -20px;
+    width: 50% !important;
+}
+
 #create-form .add-button {
     background-color: #46a825;
     border: 4px solid #fbfbfb;
