@@ -1,10 +1,9 @@
 import config
-from uritools import uricompose
 from rdflib import Graph, Namespace, RDF, URIRef
-from store import SPARQLStore
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_negotiate import produces
-from forms import RecipeForms
+from utils import SPARQLStore, RecipeForms
+from classes.recipe import Recipe
 
 
 recipe = Blueprint('recipe', __name__)
@@ -61,17 +60,14 @@ def getJSONLDRecipe(id):
 @recipe.route('/create', methods=['GET', 'POST'])
 @produces('text/html')
 def create():
+    # TODO: add tooltips based on schema.org description
     form = RecipeForms(request.form)
 
     if request.method == 'POST' and form.validate():
-        entry = URIRef(uricompose(scheme='http',
-                                  host=config.HOST,
-                                  port=config.PORT,
-                                  path='/{}/{}'.format('recipes',
-                                                       form.name.data)))
 
-        # TODO: add other fields to the graph
-        graph.add((entry, RDF.type, FOOD.Recipe))
+        for triple in Recipe(form.data).serialize():
+            graph.add(triple)
+
         graph.commit()
 
         return redirect(url_for('recipe.get'))
