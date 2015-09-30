@@ -13,12 +13,27 @@
 <div id="wrapper">
 	<h1>Your recipe:</h1>
 	<form id="create-form" method="POST" action="">
-	    <div><input id="name" type="text" placeholder="{{ form.name.description }}" name="name"></div>
-	    <div><textarea id="description" placeholder="{{ form.description.description }}" name="description"></textarea></div>
-	    <div><input id="prepTime" type="number" placeholder="{{ form.prepTime.description }}" name="prepTime"></div>
-	    <div><input id="cookTime" type="number" placeholder="{{ form.cookTime.description }}" name="cookTime"></div>
-        <div><input id="servings" type="number" placeholder="{{ form.servings.description }}" name="servings"></div>
-	    <div><textarea id="instructionStep-0" placeholder="Describe the first step" name="instructionStep-0"></textarea></div>
+	    <div>{{ form.name(placeholder=form.name.description) }}</div>
+	    <div>{{ form.description(placeholder=form.description.description) }}</div>
+
+	    <div id="prepTime">
+	    	<p>{{ form.prepTime.label }}:</p>
+		    {{ form.prepTime.days(class="time", placeholder=form.prepTime.days.description, type="number") }}
+		    {{ form.prepTime.hours(class="time", placeholder=form.prepTime.hours.description, type="number") }}
+		    {{ form.prepTime.minutes(class="time", placeholder=form.prepTime.minutes.description, type="number") }}
+	    </div>
+
+	    <div id="cookTime">
+	    	<p>{{ form.cookTime.label }}:</p>
+		    {{ form.cookTime.days(class="time", placeholder=form.cookTime.days.description, type="number") }}
+		    {{ form.cookTime.hours(class="time", placeholder=form.cookTime.hours.description, type="number") }}
+		    {{ form.cookTime.minutes(class="time", placeholder=form.cookTime.minutes.description, type="number") }}
+	    </div>
+
+	    <div>{{ form.servings(placeholder=form.servings.description, type="number") }}</div>
+
+
+	    <div>{{ form.instructionStep[0](placeholder=form.instructionStep[0].description) }}</div>
         <div><button class="add-button" id="add-instruction">Add Step</button></div>
         <div><h3>Ingredients</h3></div>
         <div><select id="ingredient-0" name="ingredient-0"></select>
