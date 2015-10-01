@@ -12,8 +12,8 @@ FOOD = Namespace(config.ONTO['BBC'])
 
 store = SPARQLStore(config.SPARQL_ENDPOINT).getConnection()
 graph = Graph(store, config.GRAPH_NAME)
-# graph.bind('FOOD', 'www.bbc.co.uk/ontologies/fo/')
-
+graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
+graph.bind('schema', 'http://schema.org/')
 
 @recipe.route('/')
 @produces('text/html')
@@ -31,6 +31,8 @@ def negotiate(id):
         return redirect(url_for('recipe.getHTMLRecipe', id=id))
     elif 'application/json+ld' in request.headers.get('Accept'):
         return redirect(url_for('recipe.getJSONLDRecipe', id=id))
+    elif 'application/rdf+xml' in request.headers.get('Accept'):
+        return redirect(url_for('recipe.getRDFRecipe', id=id))
 
 
 @recipe.route('/<id>.html')
@@ -54,7 +56,19 @@ def getJSONLDRecipe(id):
     for predicate, obj in graph.predicate_objects(entry):
         tmpGraph.add((entry, predicate, obj))
 
-    return graph.serialize(format='json-ld')
+    return tmpGraph.serialize(format='json-ld')
+
+
+@recipe.route('/<id>.rdf')
+@produces('application/rdf+xml')
+def getRDFRecipe(id):
+    tmpGraph = Graph()
+
+    entry = URIRef(request.url.replace('.rdf', ''))
+    for predicate, obj in graph.predicate_objects(entry):
+        tmpGraph.add((entry, predicate, obj))
+
+    return tmpGraph.serialize()
 
 
 @recipe.route('/create', methods=['GET', 'POST'])
