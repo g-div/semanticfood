@@ -1,7 +1,7 @@
 import config
 from utils import Timer, USDA
 from uritools import uricompose
-from rdflib import Namespace, RDF, URIRef, Literal
+from rdflib import Namespace, RDF, URIRef, Literal, XSD
 from classes.ingredient import Ingredient
 
 
@@ -27,6 +27,7 @@ class Recipe(object):
         self.servings = data.get('servings')
         self.ingredients = []
         for response in USDA(data.get('ingredient')).getData():
+            print(response)
             self.ingredients.append(Ingredient(name=response.get('report').get('food').get('name')))
 
     def serialize(self):
@@ -37,7 +38,7 @@ class Recipe(object):
 
         # TODO: add other fields to the graph
         return [(entry, RDF.type, FOOD.Recipe),
-                (entry, SCHEMA.description, Literal(self.description))]
-                #(entry, SCHEMA.prepTime, self.prepTime),
-                #(entry, SCHEMA.cookTime, self.cookTime),
-                #(entry, FOOD.serves, self.servings)]
+                (entry, SCHEMA.description, Literal(self.description, lang='en')),
+                (entry, SCHEMA.prepTime, Literal(self.prepTime, datatype=SCHEMA.Duration)),
+                (entry, SCHEMA.cookTime, Literal(self.cookTime, datatype=SCHEMA.Duration)),
+                (entry, FOOD.serves, Literal(self.servings, datatype=XSD.String))]
