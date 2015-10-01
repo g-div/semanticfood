@@ -3,7 +3,7 @@ from rdflib import Graph, Namespace, RDF, URIRef
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_negotiate import produces
 from utils import SPARQLStore, RecipeForms
-from classes.recipe import Recipe
+from models.recipe import Recipe
 
 
 recipe = Blueprint('recipe', __name__)

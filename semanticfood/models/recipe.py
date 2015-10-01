@@ -2,7 +2,7 @@ import config
 from utils import Timer, USDA
 from uritools import uricompose
 from rdflib import Namespace, RDF, URIRef, Literal, XSD
-from classes.ingredient import Ingredient
+from models.ingredient import Ingredient
 
 
 FOOD = Namespace(config.ONTO['BBC'])
