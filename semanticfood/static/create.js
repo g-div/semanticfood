@@ -8,7 +8,7 @@ $(document).ready(function () {
         $(this).parent()
             .before('<div>' +
             '<textarea id="instructionStep-' + steps + '" placeholder="Describe the next step" name="instructionStep-' + steps + '"></textarea>' +
-            '<button tabindex="-1" class="step-remove"">&#11013;</button>' +
+            '<button tabindex="-1" class="step-remove"">&#9003;</button>' +
             '</div>');
         steps++;
     });
