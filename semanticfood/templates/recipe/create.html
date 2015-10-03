@@ -34,12 +34,18 @@
 
 
 	    <div>{{ form.instructionStep[0](placeholder=form.instructionStep[0].description) }}</div>
+
         <div><button class="add-button" id="add-instruction">Add Step</button></div>
+
+
         <div><h3>Ingredients</h3></div>
-        <div><select id="ingredient-0" name="ingredient-0"></select>
-			<input id="qty" class="qtyinput" placeholder="Quantity" type="number" name="qty">
-			<select class="qty-type-select"><option>This is</option><option>not done yet</option></select>
+
+        <div><select required id="ingredient-0" name="ingredient-0"></select>
+			<input required id="qty-ingredient-0" class="qtyinput" placeholder="g / ml" type="number" name="qty">
 		</div>
+
+		<div><button class="add-button" id="add-ingredient">Add Ingredient</button></div>
+
         <div><button class="add-button" id="submit-button" type="submit">Submit Recipe</button></div>
 	</form>
 	<div>{{ form.errors if form.errors }}</div>

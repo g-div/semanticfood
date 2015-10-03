@@ -34,7 +34,7 @@ html, body {
 }
 
 #create-form .qtyinput {
-    width: 45% !important;
+    margin-top: 20px !important;
 }
 
 #create-form  .qty-type-select {
@@ -57,9 +57,11 @@ html, body {
 
 #create-form #submit-button {
     margin-top: 25px !important;
+    padding: 20px 0 !important;
 }
 
-#create-form .add-button:hover, #create-form .step-remove:hover {
+
+#create-form .add-button:hover, #create-form .remove-button:hover {
     background-color: #238C00;
 }
 
@@ -79,14 +81,14 @@ html, body {
     width: 100%;
 }
 
-#create-form .step-remove {
+#create-form .remove-button {
     background-color: #46a825;
     border: 4px solid #fbfbfb;
     color: #fff;
     font-size: 20px;
-    height: 45px;
-    margin: 25px 0 0 20px;
-    padding: 5px 0;
+    height: 42px;
+    margin: 30px 0 0 20px;
+    padding: 2px 0;
     position: absolute;
     transition: all 0.4s ease 0s;
     width: 50px;
