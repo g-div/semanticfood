@@ -9,7 +9,7 @@ SPARQL_ENDPOINT = 'http://46.101.152.77:8890/sparql'
 
 ONTO = {
     'BBC': 'http://www.bbc.co.uk/ontologies/fo/',
-    'SCHEMA': 'http://schema.org/Recipe'
+    'SCHEMA': 'http://schema.org/'
 }
 
 USDA_API = 'http://api.nal.usda.gov/ndb/reports/?ndbno={1}&api_key={0}'

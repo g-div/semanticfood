@@ -9,11 +9,13 @@ from models.recipe import Recipe
 recipe = Blueprint('recipe', __name__)
 
 FOOD = Namespace(config.ONTO['BBC'])
+LOCAL = Namespace(config.GRAPH_NAME)
 
 store = SPARQLStore(config.SPARQL_ENDPOINT).getConnection()
 graph = Graph(store, config.GRAPH_NAME)
 graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
-graph.bind('schema', 'http://schema.org/')
+graph.bind('schema', 'http://schema.org/Recipe')
+
 
 @recipe.route('/')
 @produces('text/html')
@@ -40,7 +42,7 @@ def negotiate(id):
 def getHTMLRecipe(id):
     result = {}
 
-    entry = URIRef(request.url.replace('.html', ''))
+    entry = URIRef(LOCAL[id])
     for predicate, obj in graph.predicate_objects(entry):
         result[predicate] = obj
         # TODO: adapt object to templates
@@ -50,26 +52,23 @@ def getHTMLRecipe(id):
 @recipe.route('/<id>.jsonld')
 @produces('application/json+ld')
 def getJSONLDRecipe(id):
-    tmpGraph = Graph()
-
-    entry = URIRef(request.url.replace('.jsonld', ''))
-    for predicate, obj in graph.predicate_objects(entry):
-        tmpGraph.add((entry, predicate, obj))
-
-    return tmpGraph.serialize(format='json-ld')
+    return getSingle(id).serialize(format='json-ld')
 
 
 @recipe.route('/<id>.rdf')
 @produces('application/rdf+xml')
 def getRDFRecipe(id):
+    return getSingle(id).serialize()
+
+
+def getSingle(id):
     tmpGraph = Graph()
 
-    entry = URIRef(request.url.replace('.rdf', ''))
+    entry = URIRef(LOCAL[id])
     for predicate, obj in graph.predicate_objects(entry):
         tmpGraph.add((entry, predicate, obj))
 
-    return tmpGraph.serialize()
-
+    return tmpGraph
 
 @recipe.route('/create', methods=['GET', 'POST'])
 @produces('text/html')
