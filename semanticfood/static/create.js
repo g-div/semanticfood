@@ -107,15 +107,15 @@ $(document).ready(function () {
     function getIngredientKeyWordCount(name) {
         var keywords = 0;
 
-        if (name.contains('raw')) {
+        if (name.indexOf('raw') != -1) {
             keywords++;
         }
 
         //Regex check: checking if second letter is uppercase, good indicator for company name
-        if (name.contains('Fast food') || name.contains('Snacks') || /[A-Z]/.test(name[1])) {
+        if (name.indexOf('Fast food') != -1 || name.indexOf('Snacks') != -1 || /[A-Z]/.test(name[1])) {
             keywords--;
         }
-                
+
         return keywords;
     }
 
