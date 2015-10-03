@@ -87,3 +87,9 @@ def create():
     elif request.method == 'POST' and not form.validate():
         print(form.errors)
     return render_template('recipe/create.html', form=form)
+
+@recipe.route('/search', methods=['GET', 'POST'])
+@produces('text/html')
+def search():
+    return render_template('recipe/search.html')
+
