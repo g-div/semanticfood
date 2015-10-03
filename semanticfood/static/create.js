@@ -72,7 +72,14 @@ $(document).ready(function () {
                         });
 
                         results.sort(function(a, b){
-                            return a.name.length - b.name.length;
+                            var aKeywords = getIngredientKeyWordCount(a.name);
+                            var bKeywords = getIngredientKeyWordCount(b.name);
+
+                            if (aKeywords == bKeywords) {
+                                return a.name.length - b.name.length;
+                            } else {
+                                return bKeywords - aKeywords;
+                            }
                         });
 
                         return {
@@ -96,6 +103,21 @@ $(document).ready(function () {
         });
     }
     initAjaxSelectorForIngredient(0); //Default ingredient
+
+    function getIngredientKeyWordCount(name) {
+        var keywords = 0;
+
+        if (name.contains('raw')) {
+            keywords++;
+        }
+
+        //Regex check: checking if second letter is uppercase, good indicator for company name
+        if (name.contains('Fast food') || name.contains('Snacks') || /[A-Z]/.test(name[1])) {
+            keywords--;
+        }
+                
+        return keywords;
+    }
 
     function formatIngredient (ingredient) {
         if (ingredient.loading) return ingredient.name;
