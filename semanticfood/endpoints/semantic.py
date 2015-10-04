@@ -24,6 +24,6 @@ def rdfa():
 
     graph = rdflib.Graph()
 
-    graph.parse('http://cooking.nytimes.com/recipes/1017696-mushroom-mille-feuille-with-tomato-coulis')
+    graph.parse('http://www.bbc.co.uk/food/menus/pork_belly_comfort_food_menu')
 
     return graph.serialize()
