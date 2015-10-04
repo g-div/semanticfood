@@ -62,7 +62,7 @@ $(document).ready(function () {
         valElem.attr("placeholder", "Ingredient");
 
 
-        setSelectOptions({lt : 'Must contain', gt : 'Must not contain'}, opElem);
+        setSelectOptions({eq : 'Must contain', neq : 'Must not contain'}, opElem);
         unitElem.hide();
         unitElem.empty();
     }
