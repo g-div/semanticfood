@@ -4,11 +4,22 @@
     <title>Add a new recipe - SemanticFood</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='search.js') }}"></script>
 </head>
 
 <body>
-<div id="wrapper">
-<h1>Finding the best recipies!</h1>
+<div id="wrapper-search">
+    <div class="search-box">
+        <h1>Find the best recipies!</h1>
+        <form method="POST" action="">
+            <input required id="search" class="search" placeholder="Find a recipe by name" name="qty">
+            <p>And / or add some filters of your choice. Filters are on a per-serving-size basis:</p>
+            <div class="filter-box">
+                <div><button class="add-button" id="add-filter">Add Filter</button></div>
+            </div>
+            <div><button class="add-button" id="submit-button">Search</button></div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

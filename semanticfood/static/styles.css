@@ -8,6 +8,15 @@ html, body {
     width: 600px;
 }
 
+#wrapper-search {
+    margin: 0 auto 200px;
+    width: 600px;
+}
+
+.search-box {
+    margin: 30% auto 50% auto;
+}
+
 #create-form > div {
     margin: 10px 0 0;
     width: 500px;
@@ -18,7 +27,7 @@ html, body {
     margin: 2px;
 }
 
-#create-form input, #create-form textarea {
+input, textarea {
     background-color: #fcfcfc;
     border: 3px solid rgba(0, 0, 0, 0);
     border-radius: 0;
@@ -29,9 +38,18 @@ html, body {
     font-weight: 500;
     line-height: 22px;
     margin-bottom: 10px;
-    padding: 13px 13px 13px 54px;
+    padding: 13px 13px 13px 40px;
     width: 100%;
 }
+
+input:focus, textarea:focus {
+    background: #fff none repeat scroll 0 0;
+    border: 3px solid #a1d490;
+    color: #46A825;
+    outline: medium none;
+    padding: 13px 13px 13px 40px;
+}
+
 
 #create-form .qtyinput {
     margin-top: 20px !important;
@@ -43,7 +61,7 @@ html, body {
     width: 50% !important;
 }
 
-#create-form .add-button {
+.add-button {
     background-color: #46a825;
     border: 4px solid #fbfbfb;
     color: #fff;
@@ -55,33 +73,46 @@ html, body {
     width: 100%;
 }
 
-#create-form #submit-button {
+#add-filter {
+    padding: 5px 0 !important;
+    margin-top: 15px;
+}
+
+#submit-button {
     margin-top: 25px !important;
     padding: 20px 0 !important;
 }
 
-
-#create-form .add-button:hover, #create-form .remove-button:hover {
+.add-button:hover, .remove-button:hover {
     background-color: #238C00;
-}
-
-#create-form input:focus, #create-form textarea:focus {
-    background: #fff none repeat scroll 0 0;
-    border: 3px solid #a1d490;
-    color: #46A825;
-    outline: medium none;
-    padding: 13px 13px 13px 54px;
 }
 
 #create-form textarea {
     resize: vertical;
 }
 
-#create-form select {
+select {
     width: 100%;
 }
 
-#create-form .remove-button {
+.search-box select {
+    background-color: #fcfcfc;
+    border-radius: 0;
+    box-sizing: border-box;
+    color: #3c3c3c;
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    margin-bottom: 10px;
+    padding: 7px 13px 7px 40px;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+}
+
+.remove-button {
     background-color: #46a825;
     border: 4px solid #fbfbfb;
     color: #fff;
@@ -92,4 +123,12 @@ html, body {
     position: absolute;
     transition: all 0.4s ease 0s;
     width: 50px;
+}
+
+.ingredient-remove.remove-button {
+    margin: -25px 0 0 20px;
+}
+
+.filter-unit, .filter-value {
+    padding: 7px 13px 7px 10px !important;
 }
