@@ -2,7 +2,7 @@ import config
 from rdflib import Namespace
 from urllib.parse import quote
 
-LOCAL = Namespace(config.GRAPH_NAME)
+LOCAL = Namespace(config.INGREDIENT_NS)
 
 
 class Ingredient(object):

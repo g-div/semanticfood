@@ -1,7 +1,9 @@
 import config
 from rdflib import Graph, Namespace, RDF, URIRef
+from rdflib.resource import Resource
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_negotiate import produces
+from flask_rdf import flask_rdf
 from utils import SPARQLStore, RecipeForms
 from models.recipe import Recipe
 
@@ -15,6 +17,9 @@ store = SPARQLStore(config.SPARQL_ENDPOINT).getConnection()
 graph = Graph(store, config.GRAPH_NAME)
 graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
 graph.bind('schema', 'http://schema.org/Recipe')
+
+#graph.parse('https://schema.org/docs/schema_org_rdfa.html')
+#graph.parse('http://www.bbc.co.uk/ontologies/fo/1.1.ttl')
 
 
 @recipe.route('/')
@@ -56,9 +61,23 @@ def getJSONLDRecipe(id):
 
 
 @recipe.route('/<id>.rdf')
-@produces('application/rdf+xml')
+@produces(
+   'application/x-turtle'
+   'text/turtle',
+   'application/rdf+xml',
+   'application/xml',
+   'application/trix',
+   'application/n-quads',
+   'application/n-triples',
+   'text/n-triples',
+   'text/rdf+nt',
+   'application/n3',
+   'text/n3',
+   'text/rdf+n3',
+)
+@flask_rdf
 def getRDFRecipe(id):
-    return getSingle(id).serialize()
+    return getSingle(id)
 
 
 def getSingle(id):
@@ -69,6 +88,7 @@ def getSingle(id):
         tmpGraph.add((entry, predicate, obj))
 
     return tmpGraph
+
 
 @recipe.route('/create', methods=['GET', 'POST'])
 @produces('text/html')
