@@ -5,7 +5,7 @@ from rdflib.resource import Resource
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_negotiate import produces
 from flask_rdf import flask_rdf
-from utils import SPARQLStore, RecipeForms
+from utils import SPARQLStore, RecipeForms, SearchForm
 from models.recipe import Recipe
 
 
@@ -109,9 +109,13 @@ def create():
         print(form.errors)
     return render_template('recipe/create.html', form=form)
 
+
 @recipe.route('/search', methods=['GET', 'POST'])
 def search():
-    if request.method == 'POST':
+    form = SearchForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        print(form.data)
         return json.dumps({'': "Pizza"})
     else:
         return render_template('recipe/search.html')
