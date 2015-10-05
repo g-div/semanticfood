@@ -1,4 +1,5 @@
 import config
+import json
 from rdflib import Graph, Namespace, RDF, URIRef
 from rdflib.resource import Resource
 from flask import Blueprint, render_template, request, redirect, url_for
@@ -109,7 +110,8 @@ def create():
     return render_template('recipe/create.html', form=form)
 
 @recipe.route('/search', methods=['GET', 'POST'])
-@produces('text/html')
 def search():
-    return render_template('recipe/search.html')
-
+    if request.method == 'POST':
+        return json.dumps({'': "Pizza"})
+    else:
+        return render_template('recipe/search.html')
