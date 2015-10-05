@@ -4,23 +4,6 @@ from rdflib.plugins.stores.sparqlstore import SPARQLUpdateStore
 from requests import Session
 
 
-class USDA(object):
-
-    """docstring for USDA"""
-
-    def __init__(self, data):
-        self.data = data
-
-    def getData(self):
-        responses = []
-        session = Session()
-        for ingredient in self.data:
-            responses.append(
-                session.get(config.USDA_API.format(config.USDA_API_KEY,
-                                                   ingredient)).json())
-        return responses
-
-
 class SPARQLStore():
 
     """docstring for Store"""
@@ -67,6 +50,11 @@ class TimeForm(Form):
                                        validators.Optional()])
 
 
+class IngredientForm(Form):
+    food = TextAreaField()
+    quantity = IntegerField(validators=[validators.NumberRange(min=1)])
+
+
 class RecipeForms(Form):
     name = TextField(description='Recipe Name',
                      validators=[validators.Length(min=2, max=35)])
@@ -84,8 +72,7 @@ class RecipeForms(Form):
     servings = IntegerField(description='Servings',
                             validators=[validators.NumberRange(min=1)])
 
-    ingredient = FieldList(TextAreaField(description='Ingredients'),
-                           min_entries=1)
+    ingredient = FieldList(FormField(IngredientForm), description='Ingredients')
 
     instructionStep = FieldList(TextAreaField(description='Describe the first step'),
                                 min_entries=1)
