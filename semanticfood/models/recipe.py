@@ -1,9 +1,8 @@
 import config
-from utils import Timer, USDA
+from utils import Timer
 from rdflib import Namespace, RDF, Literal, XSD, RDFS
 from rdflib.collection import Collection
 from urllib.parse import quote
-from models.ingredient import Ingredient
 from requests import Session
 
 
@@ -33,7 +32,7 @@ class Recipe():
 
         self.uri = LOCAL[quote(self.name)]
 
-    def serialize(self, graph):
+    def serialize(self):
 
         res = self._calculateNutrition()
         res.extend([(self.uri, RDF.type, SCHEMA.Recipe),
@@ -62,6 +61,7 @@ class Recipe():
             ingredientURI = self.uri + '#' + quote(name)
             res.append((self.uri, SCHEMA.recipeIngredient, ingredientURI))
             res.append((ingredientURI, SCHEMA.Quantity, Literal('{} g'.format(quantity))))
+            res.append((ingredientURI, SCHEMA.name, Literal(name)))
 
             for nutrient in nutrients:
                 if nutrient.get('nutrient_id') is not 268:
@@ -71,7 +71,6 @@ class Recipe():
 
         # TODO: transFatContent and unsaturatedFatContent are unknow
         for nutritionalInformation in nutritionalInformations:
-            print(nutritionalInformations[nutritionalInformation])
             if nutritionalInformation == 'Energy':
                 res.append((self.uri, SCHEMA.calories, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Energy)))
             if nutritionalInformation == 'Carbohydrate, by difference':
