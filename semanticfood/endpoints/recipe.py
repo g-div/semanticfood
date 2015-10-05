@@ -11,13 +11,12 @@ from models.recipe import Recipe
 
 recipe = Blueprint('recipe', __name__)
 
-FOOD = Namespace(config.ONTO['BBC'])
 LOCAL = Namespace(config.GRAPH_NAME)
 
 store = SPARQLStore(config.SPARQL_ENDPOINT).getConnection()
 graph = Graph(store, config.GRAPH_NAME)
 graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
-graph.bind('schema', 'http://schema.org/Recipe')
+graph.bind('schema', 'http://schema.org/')
 
 #graph.parse('https://schema.org/docs/schema_org_rdfa.html')
 #graph.parse('http://www.bbc.co.uk/ontologies/fo/1.1.ttl')
@@ -27,9 +26,13 @@ graph.bind('schema', 'http://schema.org/Recipe')
 @produces('text/html')
 def get():
     """ GET / List all recipes"""
+    res = graph.query("""SELECT ?label ?recipe WHERE {
+                      ?recipe a fo:Recipe . 
+                      ?recipe rdfs:label ?label 
+                      }""")
     recipes = []
-    for subject in graph.subjects(RDF.type, FOOD.Recipe):
-        recipes.append({'uri': subject, 'name': subject.split('/')[-1:][0]})
+    for row in res:
+        recipes.append({'uri': row[1], 'name': row[0]})
     return render_template('recipe/recipes.html', recipes=recipes)
 
 
@@ -46,13 +49,24 @@ def negotiate(id):
 @recipe.route('/<id>.html')
 @produces('text/html')
 def getHTMLRecipe(id):
-    result = {}
-
-    entry = URIRef(LOCAL[id])
-    for predicate, obj in graph.predicate_objects(entry):
-        result[predicate] = obj
+    res = graph.query("""SELECT ?label ?recipe ?description ?cookTime ?prepTime ?ingredient WHERE {
+                      ?recipe a fo:Recipe .
+                      ?recipe rdfs:label ?label .
+                      ?recipe schema:description ?description .
+                      ?recipe schema:cookTime ?cookTime .
+                      ?recipe schema:prepTime ?prepTime .
+                      ?recipe fo:ingredients ?ingredient .
+                      }""")
+    recipes = []
+    for row in res:
+        recipes.append({'uri': row[1],
+                        'name': row[0],
+                        'description': row[2],
+                        'cookTime': row[3],
+                        'prepTime': row[4],
+                        'ingredients': row[5]})
         # TODO: adapt object to templates
-    return render_template('recipe/recipe.html', recipe=result)
+    return render_template('recipe/recipe.html', recipe=recipes)
 
 
 @recipe.route('/<id>.jsonld')
