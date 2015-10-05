@@ -9,6 +9,8 @@ from requests import Session
 
 SCHEMA = Namespace(config.ONTO['SCHEMA'])
 LOCAL = Namespace(config.GRAPH_NAME)
+LOCAL = Namespace(config.INGREDIENT_NS)
+
 
 
 class Recipe():
@@ -60,7 +62,7 @@ class Recipe():
 
             ingredientURI = self.uri + '#' + quote(name)
             res.append((self.uri, SCHEMA.recipeIngredient, ingredientURI))
-            res.append((ingredientURI, SCHEMA.Quantity, Literal('{} g'.format(quantity))))
+            res.append((ingredientURI, SCHEMA.Quantity, Literal('{} g'.format(quantity), datatype=SCHEMA.Mass)))
             res.append((ingredientURI, SCHEMA.name, Literal(name)))
 
             for nutrient in nutrients:
@@ -73,21 +75,21 @@ class Recipe():
         for nutritionalInformation in nutritionalInformations:
             if nutritionalInformation == 'Energy':
                 res.append((self.uri, SCHEMA.calories, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Energy)))
-            if nutritionalInformation == 'Carbohydrate, by difference':
+            elif nutritionalInformation == 'Carbohydrate, by difference':
                 res.append((self.uri, SCHEMA.carbohydrateContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
-            if nutritionalInformation == 'Cholesterol':
+            elif nutritionalInformation == 'Cholesterol':
                 res.append((self.uri, SCHEMA.cholesterolContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
-            if nutritionalInformation == 'Total lipid (fat)':
+            elif nutritionalInformation == 'Total lipid (fat)':
                 res.append((self.uri, SCHEMA.fatContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
-            if nutritionalInformation == 'Fiber, total dietary':
+            elif nutritionalInformation == 'Fiber, total dietary':
                 res.append((self.uri, SCHEMA.fiberContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
-            if nutritionalInformation == 'Protein':
+            elif nutritionalInformation == 'Protein':
                 res.append((self.uri, SCHEMA.proteinContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
-            if nutritionalInformation == 'Fatty acids, total saturated':
+            elif nutritionalInformation == 'Fatty acids, total saturated':
                 res.append((self.uri, SCHEMA.saturatedFatContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
-            if nutritionalInformation == 'Sodium, Na':
+            elif nutritionalInformation == 'Sodium, Na':
                 res.append((self.uri, SCHEMA.sodiumContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
-            if nutritionalInformation == 'Sugars, total':
+            elif nutritionalInformation == 'Sugars, total':
                 res.append((self.uri, SCHEMA.sugarContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
 
         return res

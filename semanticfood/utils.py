@@ -78,3 +78,15 @@ class RecipeForms(Form):
                                 min_entries=1)
 
     submit = SubmitField(description='Save')
+
+
+class Filter(Form):
+    operator = TextField()
+    value = TextField()
+    type = IntegerField()
+
+
+class SearchForm(Form):
+    fulltextsearch = TextField()
+    filter = FieldList(FormField(Filter))
+
