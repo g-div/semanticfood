@@ -4,14 +4,14 @@ $(document).ready(function () {
         e.preventDefault();
         $(this).parent()
             .before('<div>' +
-            '<select class="filter-type-selector" data-id="' + filterCount + '" id="filter-type-' + filterCount + '" name="filter-type-' + filterCount + '">' +
+            '<select class="filter-type-selector" data-id="' + filterCount + '" id="filter-' + filterCount + '-type" name="filter-' + filterCount + '-type">' +
             '<option value="0">Nutritional Value</option>' +
             '<option value="1">Ingredient</option>' +
             '<option value="2">Effort</option>' +
             '</select>' +
-            '<select class="filter-operator" id="filter-operator-' + filterCount + '" name="filter-operator-' + filterCount + '"></select>' +
-            '<input class="filter-value" id="filter-value-' + filterCount + '" name="filter-value-' + filterCount + '">' +
-            '<select class="filter-unit" id="filter-unit-' + filterCount + '" name="filter-unit-' + filterCount + '"></select>' +
+            '<select class="filter-operator" id="filter-' + filterCount + '-operator" name="filter-' + filterCount + '-operator"></select>' +
+            '<input class="filter-value" id="filter-' + filterCount + '-value" name="filter-' + filterCount + '-value">' +
+            '<select class="filter-unit" id="filter-' + filterCount + '-unit" name="filter-' + filterCount + '-unit"></select>' +
             '<button tabindex="-1" class="ingredient-remove remove-button">&#9003;</button>' +
             '<hr></div>');
         setNutrionalFilters(filterCount);
@@ -19,9 +19,9 @@ $(document).ready(function () {
     });
 
     function setNutrionalFilters(id) {
-        var opElem = $('#filter-operator-' + id);
-        var valElem = $('#filter-value-' + id);
-        var unitElem = $('#filter-unit-' + id);
+        var opElem = $('#filter-' + id + '-operator');
+        var valElem = $('#filter-' + id + '-value');
+        var unitElem = $('#filter-' + id + '-unit');
         valElem.val("");
 
         opElem.css("width", "30%");
@@ -50,9 +50,9 @@ $(document).ready(function () {
     }
 
     function setIngredientFilters(id) {
-        var opElem = $('#filter-operator-' + id);
-        var valElem = $('#filter-value-' + id);
-        var unitElem = $('#filter-unit-' + id);
+        var opElem = $('#filter-' + id + '-operator');
+        var valElem = $('#filter-' + id + '-value');
+        var unitElem = $('#filter-' + id + '-unit');
         valElem.val("");
 
         opElem.css("width", "50%");
@@ -68,9 +68,9 @@ $(document).ready(function () {
     }
 
     function setEffortFilters(id) {
-        var opElem = $('#filter-operator-' + id);
-        var valElem = $('#filter-value-' + id);
-        var unitElem = $('#filter-unit-' + id);
+        var opElem = $('#filter-' + id + '-operator');
+        var valElem = $('#filter-' + id + '-value');
+        var unitElem = $('#filter-' + id + '-unit');
         valElem.val("");
 
         opElem.css("width", "30%");
@@ -138,6 +138,16 @@ $(document).ready(function () {
             data: $("#search-form").serialize(),
             encode: true
         }).done(function (data) {
+            var resultBlock = $(".search-results");
+            var results = $.parseJSON(data);
+
+            resultBlock.empty();
+
+            $.each(results, function (count, result) {
+                resultBlock.append('<a href="/recipes/' + result.title + '"><div><h3>' + result.title + '</h3><p>' + result.description + '</p></div></a>');
+            });
+
+
 
         });
     });

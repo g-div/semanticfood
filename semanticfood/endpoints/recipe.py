@@ -129,7 +129,25 @@ def search():
     form = SearchForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        print(form.data)
-        return json.dumps({'': "Pizza"})
+        searchResults = {}
+        for filter in form.data.get('filter'):
+            if filter.get('type') == 0:
+                print(form.data)
+            elif filter.get('type')  == 1:
+                print(form.data)
+            elif filter.get('type') == 2:
+                print(form.data)
+        result = graph.query(
+        """SELECT ?label ?Description ?recipe WHERE {
+            ?recipe a fo:Recipe.
+            ?recipe rdfs:label ?label.
+            ?recipe schema:description ?Description
+            }""")
+
+        i = 0;
+        for row in result:
+            searchResults[i] = {"title": row[0], "description": row[1], "url": row[2]}
+            i+=1
+        return json.dumps(searchResults)
     else:
         return render_template('recipe/search.html')

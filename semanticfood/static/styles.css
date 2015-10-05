@@ -14,7 +14,7 @@ html, body {
 }
 
 .search-box {
-    margin: 30% auto 50% auto;
+    margin: 30% auto 25%;
 }
 
 #create-form > div {
@@ -131,4 +131,29 @@ select {
 
 .filter-unit, .filter-value {
     padding: 7px 13px 7px 10px !important;
+}
+
+.search-results > a > div {
+    background-color: #fff;
+    font-size: 18px;
+    min-height: 50px;
+    margin-bottom: 10px;
+    padding: 13px;
+    width: 100%;
+}
+
+.search-results h3 {
+    font-size: 20px;
+    line-height: 15px;
+    margin: 0;
+}
+
+.search-results p {
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.search-results a {
+    color: #000;
+    text-decoration: none;
 }
