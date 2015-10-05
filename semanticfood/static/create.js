@@ -35,8 +35,8 @@ $(document).ready(function () {
     $("#add-ingredient").on("click", function (e) {
         e.preventDefault();
         $(this).parent()
-            .before('<div><select id="ingredient-' + ingredients + '" name="ingredient-' + ingredients + '"></select>' +
-            '<input required id="qty-ingredient-' + ingredients + '" class="qtyinput" placeholder="g / ml" type="number" name="qty">' +
+            .before('<div><select id="ingredient-' + ingredients + '-food" name="ingredient-' + ingredients + '-food"></select>' +
+            '<input required id="ingredient-' + ingredients + '-quantity" class="qtyinput" placeholder="g / ml" type="number" name="ingredient-' + ingredients + '-quantity">' +
             '<button tabindex="-1" class="ingredient-remove remove-button">&#9003;</button>' +
             '</div>');
         initAjaxSelectorForIngredient(ingredients);
@@ -44,7 +44,7 @@ $(document).ready(function () {
     });
 
     function initAjaxSelectorForIngredient(ingredient) {
-        $("#ingredient-"+ingredient).select2({
+        $("#ingredient-"+ ingredient +"-food").select2({
             ajax: {
                 url: "http://api.nal.usda.gov/ndb/search",
                 dataType: 'json',
