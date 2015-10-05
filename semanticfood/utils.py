@@ -84,6 +84,7 @@ class Filter(Form):
     operator = TextField()
     value = TextField()
     type = IntegerField()
+    unit = TextField()
 
 
 class SearchForm(Form):
