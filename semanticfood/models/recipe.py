@@ -2,15 +2,15 @@ import config
 from utils import Timer
 from rdflib import Namespace, RDF, Literal, XSD, RDFS
 from rdflib.collection import Collection
-from urllib.parse import quote
+from urllib import parse
 from requests import Session
 
 
 
+FO = Namespace(config.ONTO['BBC'])
 SCHEMA = Namespace(config.ONTO['SCHEMA'])
 LOCAL = Namespace(config.GRAPH_NAME)
-LOCAL = Namespace(config.INGREDIENT_NS)
-
+INGREDIENT = Namespace(config.INGREDIENT_NS)
 
 
 class Recipe():
@@ -32,12 +32,13 @@ class Recipe():
         self.ingredients = data.get('ingredient')
         self.steps = data.get('instructionStep')
 
-        self.uri = LOCAL[quote(self.name)]
+        self.uri = LOCAL[self.name.strip().replace(' ', '_')]
 
     def serialize(self):
 
         res = self._calculateNutrition()
-        res.extend([(self.uri, RDF.type, SCHEMA.Recipe),
+        res.extend([(self.uri, RDF.type, FO.Recipe),
+               (self.uri, RDF.type, SCHEMA.Recipe),
                (self.uri, RDFS.label, Literal(self.name)),
                (self.uri, SCHEMA.description, Literal(self.description, lang='en')),
                (self.uri, SCHEMA.prepTime, Literal(self.prepTime, datatype=SCHEMA.Duration)),
@@ -60,10 +61,15 @@ class Recipe():
             nutrients = response.get('report').get('food').get('nutrients')
             quantity = ingredient['quantity']
 
-            ingredientURI = self.uri + '#' + quote(name)
-            res.append((self.uri, SCHEMA.recipeIngredient, ingredientURI))
-            res.append((ingredientURI, SCHEMA.Quantity, Literal('{} g'.format(quantity), datatype=SCHEMA.Mass)))
-            res.append((ingredientURI, SCHEMA.name, Literal(name)))
+            ingredientURI = INGREDIENT["{}g_{}".format(quantity, name.strip().replace(' ', '_'))]
+            foodURI = INGREDIENT[name.strip().replace(' ', '_')]
+            res.append((self.uri, FO.ingredients, ingredientURI))
+            res.append((ingredientURI, RDF.type, FO.Ingredient))
+            res.append((ingredientURI, FO.metric_quantity, Literal('{} g'.format(quantity))))
+            res.append((ingredientURI, FO.food, foodURI))
+            res.append((foodURI, RDF.type, FO.Food))
+            res.append((foodURI, RDFS.label, Literal(name)))
+
 
             for nutrient in nutrients:
                 if nutrient.get('nutrient_id') is not 268:
