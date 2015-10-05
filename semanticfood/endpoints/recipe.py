@@ -112,6 +112,7 @@ def create():
 @recipe.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
+        request.form;
         return json.dumps({'': "Pizza"})
     else:
         return render_template('recipe/search.html')

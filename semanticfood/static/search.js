@@ -138,7 +138,10 @@ $(document).ready(function () {
             data: $("#search-form").serialize(),
             encode: true
         }).done(function (data) {
+            var resultBlock = $(".search-results");
+            resultBlock.empty();
 
+            resultBlock.append("<div>test</div>");
         });
     });
 });
