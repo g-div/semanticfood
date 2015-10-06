@@ -63,9 +63,13 @@ def getHTMLRecipe(id):
     recipe.fat = entry.value(SCHEMA.fatContent)
     recipe.cal = entry.value(SCHEMA.calories)
 
-    for ingredient in entry.value(FOOD.ingredients).objects():
-        print(ingredient)
-        # TODO: add ingredients and instructions
+    # TODO: add instructions
+
+    recipe.ingredients = []
+    for ingredient in entry.objects(FOOD.ingredients):
+        name = ingredient.value(FOOD.food).value(RDFS.label)
+        quantity = ingredient.value(FOOD.metric_quantity)
+        recipe.ingredients.append('{} {}'.format(quantity, name))
 
     return render_template('recipe/recipe.html', recipe=recipe)
 
