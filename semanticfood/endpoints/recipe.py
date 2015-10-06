@@ -87,23 +87,39 @@ def search():
 
     if request.method == 'POST' and form.validate():
         searchResults = {}
+        whereClause = ""
+        selectFields = ""
+
+        fulltextsearch = form.data.get('fulltextsearch').strip(' \t\n\r')
+        if fulltextsearch:
+            whereClause += ". FILTER regex(str(?label),'{0}','i')".format(fulltextsearch)
+
         for filter in form.data.get('filter'):
             if filter.get('type') == 0:
-                print(form.data)
+                val = filter.get('value')
+                unit = filter.get('unit')
+                operator = "<"
+                if filter.get('operator') == "gt":
+                    operator = ">"
+                whereClause += ".FILTER (?{0} {1} {2})".format(unit, operator, val)
+                selectFields += ". ?recipe schema:{0} ?{0}".format(unit)
             elif filter.get('type')  == 1:
                 print(form.data)
             elif filter.get('type') == 2:
                 print(form.data)
+
         result = graph.query(
         """SELECT ?label ?Description ?recipe WHERE {
-            ?recipe a fo:Recipe.
-            ?recipe rdfs:label ?label.
+            ?recipe a fo:Recipe .
+            ?recipe rdfs:label ?label .
             ?recipe schema:description ?Description
+            """ + selectFields + """
+            """ + whereClause + """
             }""")
 
         i = 0;
         for row in result:
-            searchResults[i] = {"title": row[0], "description": row[1], "url": row[2]}
+            searchResults[i] = {"title": row[0], "description": row[1], "uri": row[2]}
             i+=1
         return json.dumps(searchResults)
     else:
