@@ -1,7 +1,17 @@
 import config
-from wtforms import Form, FieldList, TextField, TextAreaField, DateTimeField, IntegerField, FormField, SubmitField, validators
+from wtforms import Form, FieldList, TextField, TextAreaField, IntegerField, FormField, SubmitField, validators
+from rdflib import Graph, URIRef, Namespace
 from rdflib.plugins.stores.sparqlstore import SPARQLUpdateStore
-from requests import Session
+
+
+def getSingle(graph, ns, id):
+    tmpGraph = Graph()
+
+    entry = URIRef(ns[id])
+    for predicate, obj in graph.predicate_objects(entry):
+        tmpGraph.add((entry, predicate, obj))
+
+    return tmpGraph
 
 
 class SPARQLStore():

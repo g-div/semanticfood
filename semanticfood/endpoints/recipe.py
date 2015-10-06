@@ -1,11 +1,11 @@
 import config
 import json
-from rdflib import Graph, Namespace, RDF, RDFS, URIRef
+from rdflib import Graph, Namespace, URIRef
 from rdflib.resource import Resource
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_negotiate import produces
 from flask_rdf import flask_rdf
-from utils import SPARQLStore, RecipeForms, SearchForm
+from utils import SPARQLStore, RecipeForms, SearchForm, getSingle
 from models.recipe import Recipe
 
 
@@ -60,7 +60,7 @@ def getHTMLRecipe(id):
 @recipe.route('/<id>.jsonld')
 @produces('application/json+ld')
 def getJSONLDRecipe(id):
-    return getSingle(id).serialize(format='json-ld')
+    return getSingle(graph, LOCAL, id).serialize(format='json-ld')
 
 
 @recipe.route('/<id>.rdf')
@@ -80,17 +80,7 @@ def getJSONLDRecipe(id):
 )
 @flask_rdf
 def getRDFRecipe(id):
-    return getSingle(id)
-
-
-def getSingle(id):
-    tmpGraph = Graph()
-
-    entry = URIRef(LOCAL[id])
-    for predicate, obj in graph.predicate_objects(entry):
-        tmpGraph.add((entry, predicate, obj))
-
-    return tmpGraph
+    return getSingle(graph, LOCAL, id)
 
 
 @recipe.route('/create', methods=['GET', 'POST'])
