@@ -1,6 +1,6 @@
 import config
 import json
-from rdflib import Graph, Namespace, RDF, URIRef
+from rdflib import Graph, Namespace, RDF, RDFS, URIRef
 from rdflib.resource import Resource
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_negotiate import produces
@@ -12,6 +12,8 @@ from models.recipe import Recipe
 recipe = Blueprint('recipe', __name__)
 
 LOCAL = Namespace(config.GRAPH_NAME)
+SCHEMA = Namespace(config.ONTO['SCHEMA'])
+FOOD = Namespace(config.ONTO['BBC'])
 
 store = SPARQLStore(config.SPARQL_ENDPOINT).getConnection()
 graph = Graph(store, config.GRAPH_NAME)
@@ -27,7 +29,7 @@ graph.bind('schema', 'http://schema.org/')
 def get():
     """ GET / List all recipes"""
     res = graph.query("""SELECT ?label ?recipe WHERE {
-                      ?recipe a fo:Recipe . 
+                      ?recipe a fo:Recipe. 
                       ?recipe rdfs:label ?label 
                       }""")
     recipes = []
@@ -49,24 +51,23 @@ def negotiate(id):
 @recipe.route('/<id>.html')
 @produces('text/html')
 def getHTMLRecipe(id):
-    res = graph.query("""SELECT ?label ?recipe ?description ?cookTime ?prepTime ?ingredient WHERE {
-                      ?recipe a fo:Recipe .
-                      ?recipe rdfs:label ?label .
-                      ?recipe schema:description ?description .
-                      ?recipe schema:cookTime ?cookTime .
-                      ?recipe schema:prepTime ?prepTime .
-                      ?recipe fo:ingredients ?ingredient .
-                      }""")
-    recipes = []
-    for row in res:
-        recipes.append({'uri': row[1],
-                        'name': row[0],
-                        'description': row[2],
-                        'cookTime': row[3],
-                        'prepTime': row[4],
-                        'ingredients': row[5]})
-        # TODO: adapt object to templates
-    return render_template('recipe/recipe.html', recipe=recipes)
+    recipe = Recipe()
+
+    entry = Resource(graph, URIRef(LOCAL[id]))
+
+    recipe.name = entry.value(RDFS.label)
+    recipe.description = entry.value(SCHEMA.description)
+    recipe.prepTime = entry.value(SCHEMA.prepTime)
+    recipe.cookTime = entry.value(SCHEMA.cookTime)
+    recipe.servings = entry.value(SCHEMA.recipeYield)
+    recipe.fat = entry.value(SCHEMA.fatContent)
+    recipe.cal = entry.value(SCHEMA.calories)
+
+    for ingredient in entry.value(FOOD.ingredients).objects():
+        print(ingredient)
+        # TODO: add ingredients and instructions
+
+    return render_template('recipe/recipe.html', recipe=recipe)
 
 
 @recipe.route('/<id>.jsonld')

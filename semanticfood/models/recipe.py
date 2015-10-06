@@ -1,6 +1,6 @@
 import config
 from utils import Timer
-from rdflib import Namespace, RDF, Literal, XSD, RDFS
+from rdflib import Namespace, RDF, Literal, RDFS
 from rdflib.collection import Collection
 from urllib import parse
 from requests import Session
@@ -24,10 +24,10 @@ class Recipe():
                              'servings': 0,
                              'ingredient': []}):
 
-        self.name = data.get('name')
+        self.name = data.get('name').strip()
         self.description = data.get('description')
-        self.prepTime = Timer(data.get('prepTime')).isoformat()
-        self.cookTime = Timer(data.get('cookTime')).isoformat()
+        self.prepTime = data.get('prepTime')
+        self.cookTime = data.get('cookTime')
         self.servings = data.get('servings')
         self.ingredients = data.get('ingredient')
         self.steps = data.get('instructionStep')
@@ -41,9 +41,9 @@ class Recipe():
                (self.uri, RDF.type, SCHEMA.Recipe),
                (self.uri, RDFS.label, Literal(self.name)),
                (self.uri, SCHEMA.description, Literal(self.description, lang='en')),
-               (self.uri, SCHEMA.prepTime, Literal(self.prepTime, datatype=SCHEMA.Duration)),
-               (self.uri, SCHEMA.cookTime, Literal(self.cookTime, datatype=SCHEMA.Duration)),
-               (self.uri, SCHEMA.recipeYield, Literal(self.servings, datatype=XSD.String))])
+               (self.uri, SCHEMA.prepTime, Literal(Timer(self.prepTime).isoformat(), datatype=SCHEMA.Duration)),
+               (self.uri, SCHEMA.cookTime, Literal(Timer(self.cookTime).isoformat(), datatype=SCHEMA.Duration)),
+               (self.uri, SCHEMA.recipeYield, Literal(self.servings))])
 
 
         # TODO: add steps to the graph
@@ -63,12 +63,12 @@ class Recipe():
 
             ingredientURI = INGREDIENT["{}g_{}".format(quantity, name.strip().replace(' ', '_'))]
             foodURI = INGREDIENT[name.strip().replace(' ', '_')]
-            res.append((self.uri, FO.ingredients, ingredientURI))
-            res.append((ingredientURI, RDF.type, FO.Ingredient))
-            res.append((ingredientURI, FO.metric_quantity, Literal('{} g'.format(quantity))))
-            res.append((ingredientURI, FO.food, foodURI))
-            res.append((foodURI, RDF.type, FO.Food))
-            res.append((foodURI, RDFS.label, Literal(name)))
+            res.extend([(self.uri, FO.ingredients, ingredientURI),
+                        (ingredientURI, RDF.type, FO.Ingredient),
+                        (ingredientURI, FO.metric_quantity, Literal('{} g'.format(quantity))),
+                        (ingredientURI, FO.food, foodURI),
+                        (foodURI, RDF.type, FO.Food),
+                        (foodURI, RDFS.label, Literal(name))])
 
 
             for nutrient in nutrients:

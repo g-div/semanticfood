@@ -7,13 +7,13 @@
 <body>
 
 	<div itemscope itemtype="http://schema.org/Recipe">
-		<h1 itemprop="name">{{ recipe.name }}</h1>
+		<h1 itemprop="name">{{ recipe.name}}</h1>
 		By <span itemprop="author">{{ recipe.author }}</span>,
 		<meta itemprop="datePublished" content="{{ recipe.datePublished }}">{{ recipe.datePublished }}
 		<span itemprop="description">{{ recipe.description }}</span>
 			Prep Time: <meta itemprop="prepTime" content="{{ recipe.prepTime }}">{{ recipe.prepTime }}
 			Cook time: <meta itemprop="cookTime" content="{{ recipe.cookTime }}">{{ recipe.cookTime }}
-			Yield: <span itemprop="recipeYield">{{ recipe.serving }}</span>
+			Yield: <span itemprop="recipeYield">{{ recipe.servings }}</span>
 			<div itemprop="nutrition"
 			itemscope itemtype="http://schema.org/NutritionInformation">
 			Nutrition facts:
