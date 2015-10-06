@@ -19,9 +19,6 @@ graph = Graph(store, config.GRAPH_NAME)
 graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
 graph.bind('schema', 'http://schema.org/')
 
-#graph.parse('https://schema.org/docs/schema_org_rdfa.html')
-#graph.parse('http://www.bbc.co.uk/ontologies/fo/1.1.ttl')
-
 
 @recipe.route('/')
 @produces('text/html')
@@ -37,19 +34,9 @@ def get():
     return render_template('recipe/recipes.html', recipes=recipes)
 
 
-@recipe.route('/<id>')
-def negotiate(id):
-    if 'text/html' in request.headers.get('Accept'):
-        return redirect(url_for('recipe.getHTMLRecipe', id=id))
-    elif 'application/json+ld' in request.headers.get('Accept'):
-        return redirect(url_for('recipe.getJSONLDRecipe', id=id))
-    elif 'application/rdf+xml' in request.headers.get('Accept'):
-        return redirect(url_for('recipe.getRDFRecipe', id=id))
-
-
 @recipe.route('/<id>.html')
 @produces('text/html')
-def getHTMLRecipe(id):
+def getHTML(id):
 
     entry = Resource(graph, URIRef(LOCAL[id]))
     recipe = Recipe().deserialize(entry)
@@ -59,18 +46,15 @@ def getHTMLRecipe(id):
 
 @recipe.route('/<id>.jsonld')
 @produces('application/json+ld')
-def getJSONLDRecipe(id):
+def getJSONLD(id):
     return getSingle(graph, LOCAL, id).serialize(format='json-ld')
 
 
-@recipe.route('/<id>.rdf')
+@recipe.route('/<id>')
 @produces(
-   'application/x-turtle'
-   'text/turtle',
    'application/rdf+xml',
    'application/xml',
-   'application/trix',
-   'application/n-quads',
+   'text/html',
    'application/n-triples',
    'text/n-triples',
    'text/rdf+nt',
@@ -80,6 +64,10 @@ def getJSONLDRecipe(id):
 )
 @flask_rdf
 def getRDFRecipe(id):
+    if 'text/html' in request.headers.get('Accept'):
+        return redirect(url_for('recipe.getHTML', id=id))
+    if 'application/json+ld' in request.headers.get('Accept'):
+        return redirect(url_for('recipe.getJSONLD', id=id))
     return getSingle(graph, LOCAL, id)
 
 
