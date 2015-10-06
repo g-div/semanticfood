@@ -12,11 +12,10 @@ from models.recipe import Recipe
 recipe = Blueprint('recipe', __name__)
 
 LOCAL = Namespace(config.GRAPH_NAME)
-SCHEMA = Namespace(config.ONTO['SCHEMA'])
-FOOD = Namespace(config.ONTO['BBC'])
 
 store = SPARQLStore(config.SPARQL_ENDPOINT).getConnection()
 graph = Graph(store, config.GRAPH_NAME)
+
 graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
 graph.bind('schema', 'http://schema.org/')
 
@@ -51,25 +50,9 @@ def negotiate(id):
 @recipe.route('/<id>.html')
 @produces('text/html')
 def getHTMLRecipe(id):
-    recipe = Recipe()
 
     entry = Resource(graph, URIRef(LOCAL[id]))
-
-    recipe.name = entry.value(RDFS.label)
-    recipe.description = entry.value(SCHEMA.description)
-    recipe.prepTime = entry.value(SCHEMA.prepTime)
-    recipe.cookTime = entry.value(SCHEMA.cookTime)
-    recipe.servings = entry.value(SCHEMA.recipeYield)
-    recipe.fat = entry.value(SCHEMA.fatContent)
-    recipe.cal = entry.value(SCHEMA.calories)
-
-    # TODO: add instructions
-
-    recipe.ingredients = []
-    for ingredient in entry.objects(FOOD.ingredients):
-        name = ingredient.value(FOOD.food).value(RDFS.label)
-        quantity = ingredient.value(FOOD.metric_quantity)
-        recipe.ingredients.append('{} {}'.format(quantity, name))
+    recipe = Recipe().deserialize(entry)
 
     return render_template('recipe/recipe.html', recipe=recipe)
 

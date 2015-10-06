@@ -49,6 +49,25 @@ class Recipe():
         # TODO: add steps to the graph
         return res
 
+    def deserialize(self, resource):
+        self.name = resource.value(RDFS.label)
+        self.description = resource.value(SCHEMA.description)
+        self.prepTime = resource.value(SCHEMA.prepTime)
+        self.cookTime = resource.value(SCHEMA.cookTime)
+        self.servings = resource.value(SCHEMA.recipeYield)
+        self.fat = resource.value(SCHEMA.fatContent)
+        self.cal = resource.value(SCHEMA.calories)
+
+        # TODO: add instructions
+
+        self.ingredients = []
+        for ingredient in resource.objects(FO.ingredients):
+            name = ingredient.value(FO.food).value(RDFS.label)
+            quantity = ingredient.value(FO.metric_quantity)
+            self.ingredients.append('{} {}'.format(quantity, name))
+
+        return self
+
     def _calculateNutrition(self):
         res = []
 
