@@ -1,19 +1,15 @@
 import config
-from rdflib import Graph, Namespace, RDF, URIRef
-from flask import Blueprint, render_template, request, redirect, url_for
+from rdflib import Namespace
+from flask import Blueprint
 from flask_rdf import flask_rdf
 from flask_negotiate import produces
-from utils import SPARQLStore, getSingle
+from utils import getSingle, GraphWrapper
 
 ingredients = Blueprint('ingredients', __name__)
 
-LOCAL = Namespace(config.INGREDIENT_NS)
+LOCAL = Namespace(config.INGREDIENT_PREFIX)
 
-store = SPARQLStore(config.SPARQL_ENDPOINT).getConnection()
-graph = Graph(store, config.GRAPH_NAME)
-
-graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
-graph.bind('schema', 'http://schema.org/')
+graph = GraphWrapper().getConnection()
 
 
 @ingredients.route('/<id>')

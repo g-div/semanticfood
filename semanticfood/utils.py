@@ -1,6 +1,6 @@
 import config
 from wtforms import Form, FieldList, TextField, TextAreaField, IntegerField, FormField, SubmitField, validators
-from rdflib import Graph, URIRef, Namespace
+from rdflib import Graph, URIRef
 from rdflib.plugins.stores.sparqlstore import SPARQLUpdateStore
 
 
@@ -14,18 +14,19 @@ def getSingle(graph, ns, id):
     return tmpGraph
 
 
-class SPARQLStore():
+class GraphWrapper():
 
-    """docstring for Store"""
-
-    def __init__(self, url):
-        self.store = SPARQLUpdateStore(queryEndpoint=url, update_endpoint=url)
+    def __init__(self):
+        store = SPARQLUpdateStore(config.SPARQL_ENDPOINT, config.SPARQL_ENDPOINT)
+        self.graph = Graph(store, config.GRAPH_NAME)
+        self.graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
+        self.graph.bind('schema', 'http://schema.org/')
 
     def getConnection(self):
-        return self.store
+        return self.graph
 
 
-class Timer(object):
+class Timer():
 
     """docstring for Timer"""
 

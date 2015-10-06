@@ -1,23 +1,19 @@
 import config
 import json
-from rdflib import Graph, Namespace, URIRef
+from rdflib import Namespace, URIRef
 from rdflib.resource import Resource
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_negotiate import produces
 from flask_rdf import flask_rdf
-from utils import SPARQLStore, RecipeForms, SearchForm, getSingle
+from utils import RecipeForms, SearchForm, getSingle, GraphWrapper
 from models.recipe import Recipe
 
 
 recipe = Blueprint('recipe', __name__)
 
-LOCAL = Namespace(config.GRAPH_NAME)
+LOCAL = Namespace(config.RECIPE_PREFIX)
 
-store = SPARQLStore(config.SPARQL_ENDPOINT).getConnection()
-graph = Graph(store, config.GRAPH_NAME)
-
-graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
-graph.bind('schema', 'http://schema.org/')
+graph = GraphWrapper().getConnection()
 
 
 @recipe.route('/')
@@ -44,17 +40,12 @@ def getHTML(id):
     return render_template('recipe/recipe.html', recipe=recipe)
 
 
-@recipe.route('/<id>.jsonld')
-@produces('application/json+ld')
-def getJSONLD(id):
-    return getSingle(graph, LOCAL, id).serialize(format='json-ld')
-
-
 @recipe.route('/<id>')
 @produces(
    'application/rdf+xml',
    'application/xml',
    'text/html',
+   'application/json+ld',
    'application/n-triples',
    'text/n-triples',
    'text/rdf+nt',
@@ -67,7 +58,7 @@ def getRDFRecipe(id):
     if 'text/html' in request.headers.get('Accept'):
         return redirect(url_for('recipe.getHTML', id=id))
     if 'application/json+ld' in request.headers.get('Accept'):
-        return redirect(url_for('recipe.getJSONLD', id=id))
+        return getSingle(graph, LOCAL, id).serialize(format='json-ld')
     return getSingle(graph, LOCAL, id)
 
 

@@ -9,8 +9,8 @@ from requests import Session
 
 FO = Namespace(config.ONTO['BBC'])
 SCHEMA = Namespace(config.ONTO['SCHEMA'])
-LOCAL = Namespace(config.GRAPH_NAME)
-INGREDIENT = Namespace(config.INGREDIENT_NS)
+LOCAL = Namespace(config.RECIPE_PREFIX)
+INGREDIENT = Namespace(config.INGREDIENT_PREFIX)
 
 
 class Recipe():
