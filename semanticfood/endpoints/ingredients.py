@@ -1,6 +1,6 @@
 import config
 from rdflib import Namespace
-from flask import Blueprint
+from flask import Blueprint, request
 from flask_rdf import flask_rdf
 from flask_negotiate import produces
 from utils import getSingle, GraphWrapper
@@ -18,6 +18,7 @@ graph = GraphWrapper().getConnection()
    'application/rdf+xml',
    'application/xml',
    'text/html',
+   'application/json+ld',
    'application/n-triples',
    'text/n-triples',
    'text/rdf+nt',
@@ -26,4 +27,6 @@ graph = GraphWrapper().getConnection()
    'text/rdf+n3',
 )
 def getRDFIngredient(id):
-	return getSingle(graph, LOCAL, id)
+    if 'application/json+ld' in request.headers.get('Accept'):
+        return getSingle(graph, LOCAL, id).serialize(format='json-ld')
+    return getSingle(graph, LOCAL, id)
