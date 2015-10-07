@@ -34,16 +34,17 @@ $(document).ready(function () {
 
         setSelectOptions({lt: 'Fewer than', gt: 'More than'}, opElem);
         setSelectOptions({
-                calories: 'Calories (kcal)',
-                carbohydrateContent: 'Carbohydrates (g)',
-                cholesterolContent: 'Cholesterol (mg)',
-                fatContent: 'Fat (g)',
+                energyPer100g: 'Calories (kcal)',
+                carbohydratesPer100g: 'Carbohydrates (g)',
+                cholesterolPer100g: 'Cholesterol (mg)',
+                fatPer100g: 'Fat (g)',
                 unsaturatedFatContent: 'Unsaturated Fat (g)',
-                saturatedFatContent: 'Saturated Fat (g)',
-                fiberContent: 'Fibers (g)',
-                proteinContent: 'Protein (g)',
-                sodiumContent: 'Sodium (mg)',
-                sugarContent: 'Sugar (g)'
+                saturatedFatPer100g: 'Saturated Fat (g)',
+                transFatPer100g: 'Trans Fat (g)',
+                fiberPer100g: 'Fibers (g)',
+                proteinsPer100g: 'Protein (g)',
+                sodiumPer100g: 'Sodium (mg)',
+                sugarsPer100g: 'Sugar (g)'
             },
             unitElem);
         unitElem.show();

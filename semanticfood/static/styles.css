@@ -157,3 +157,12 @@ select {
     color: #000;
     text-decoration: none;
 }
+
+.nutrition span {
+    float: right;
+    margin-right: 40%;
+}
+
+.fat-detail {
+    margin: 5px 20px 0 30px;
+}

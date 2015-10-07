@@ -104,27 +104,39 @@ def search():
             whereClause += ". FILTER regex(str(?label),'{0}','i')".format(fulltextsearch)
 
         for filter in form.data.get('filter'):
+
             if filter.get('type') == 0:
                 val = filter.get('value')
                 unit = filter.get('unit')
                 operator = "<"
                 if filter.get('operator') == "gt":
                     operator = ">"
-                whereClause += ".FILTER (?{0} {1} {2})".format(unit, operator, val)
-                selectFields += ". ?recipe schema:{0} ?{0}".format(unit)
+                whereClause += ". FILTER (?{0} {1} {2})".format(unit, operator, val)
+                selectFields += ". ?recipe food:{0} ?{0}".format(unit)
+
             elif filter.get('type')  == 1:
-                print(form.data)
+                val = filter.get('value')
+
+                if filter.get('operator') == "eq":
+                    whereClause += ". FILTER regex(str(?label),'{0}','i')".format(val)
+                else:
+                    whereClause += ". FILTER regex(str(?label),'{0}','i')".format(val)
+
+                #selectFields += ". ?recipe food:{0} ?{0}".format(unit)
+
             elif filter.get('type') == 2:
                 print(form.data)
 
-        result = graph.query(
-        """SELECT ?label ?Description ?recipe WHERE {
-            ?recipe a fo:Recipe .
-            ?recipe rdfs:label ?label .
-            ?recipe schema:description ?Description
-            """ + selectFields + """
-            """ + whereClause + """
-            }""")
+        query = """SELECT ?label ?Description ?recipe WHERE {
+                    ?recipe a fo:Recipe .
+                    ?recipe rdfs:label ?label .
+                    ?recipe rdfs:comment ?Description
+                    """ + selectFields + """
+                    """ + whereClause + """
+                }"""
+
+        print(query)
+        result = graph.query(query)
 
         i = 0;
         for row in result:
