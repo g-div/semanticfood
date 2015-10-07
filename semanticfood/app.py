@@ -9,14 +9,13 @@
 """
 
 from flask import Flask
-from endpoints import GenericBlueprint
-from endpoints.recipe import recipe
+from endpoints import GenericBlueprint, Recipe
 
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
 
-app.register_blueprint(recipe, url_prefix='/recipes')
+app.register_blueprint(Recipe, url_prefix='/recipes')
 
 ingredients = GenericBlueprint('ingredients').getBlueprint()
 app.register_blueprint(ingredients, url_prefix='/ingredients')

@@ -2,7 +2,7 @@ import config
 import json
 from rdflib import Namespace, URIRef
 from rdflib.resource import Resource
-from flask import Blueprint, render_template, request, redirect, url_for, current_app
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_negotiate import produces
 from flask_rdf import flask_rdf
 from utils import RecipeForms, SearchForm, getSingle, GraphWrapper
@@ -32,7 +32,6 @@ graph = GraphWrapper().getConnection()
 @flask_rdf
 def get():
     """ GET / List all recipes"""
-    print(current_app)
     if 'text/html' in request.headers.get('Accept'):
         res = graph.query("""SELECT ?label ?recipe WHERE {
                           ?recipe a fo:Recipe. 

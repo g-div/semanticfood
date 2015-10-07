@@ -1,9 +1,12 @@
 import config
+from .recipe import recipe
 from rdflib import Namespace
 from flask import Blueprint, request
 from flask_rdf import flask_rdf
 from flask_negotiate import produces
 from utils import getSingle, GraphWrapper
+
+Recipe = recipe
 
 
 class GenericBlueprint():
