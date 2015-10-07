@@ -28,13 +28,14 @@ class Recipe():
         self.cookTime = data.get('cookTime')
         self.servings = data.get('servings')
         self.ingredients = data.get('ingredient')
-        self.steps = StepSequence(steps=data.get('instructionStep'))
+        self.steps = data.get('instructionStep')
 
         self.uri = self.LOCAL[self.name.strip().replace(' ', '_')]
 
     def serialize(self):
 
         res = self._serializeIngredients()
+        self.steps = StepSequence(steps=self.steps)
         res.extend(self.steps.serialize())
         res.extend([(self.uri, RDF.type, FO.Recipe),
                (self.uri, RDF.type, NUTRIENT.Food),
