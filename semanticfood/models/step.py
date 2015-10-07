@@ -4,7 +4,7 @@ from rdflib import Namespace, RDF, Literal
 
 
 class StepSequence():
-    LOCAL = Namespace(config.NS['steps'])
+    LOCAL = Namespace(config.NS['stepsSequence'])
     SFO = Namespace(config.ONTO['LOCAL'])
 
     def __init__(self, steps=[]):
