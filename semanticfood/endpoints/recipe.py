@@ -120,11 +120,16 @@ def search():
                 val = filter.get('value')
 
                 if filter.get('operator') == "eq":
-                    whereClause += ". FILTER regex(str(?label),'{0}','i')".format(val)
+                    whereClause += ". FILTER regex(str(?filterlabel),'{0}','i')".format(val)
+                    selectFields += ". ?a rdfs:label ?filterlabel"
                 else:
-                    whereClause += ". FILTER regex(str(?label),'{0}','i')".format(val)
+                    whereClause += """. OPTIONAL {
+                    ?a rdfs:label ?filterlabel .
+                    FILTER (regex(str(?filterlabel),'""" + val + """','i'))
+                    }
+                    FILTER (!BOUND(?filterlabel))"""
 
-                #selectFields += ". ?recipe food:{0} ?{0}".format(unit)
+
 
             elif filter.get('type') == 2:
                 val = filter.get('value')
@@ -136,7 +141,7 @@ def search():
                     whereClause += ". FILTER (?{0} {1} {2})".format(unit, operator, val)
                     selectFields += ". ?recipe sfo:{0} ?{0}".format(unit)
 
-        query = """SELECT ?label ?Description ?recipe WHERE {
+        query = """SELECT DISTINCT ?label ?Description ?recipe WHERE {
                     ?recipe a fo:Recipe .
                     ?recipe rdfs:label ?label .
                     ?recipe rdfs:comment ?Description
