@@ -9,17 +9,17 @@
 """
 
 from flask import Flask
+from endpoints import GenericBlueprint
 from endpoints.recipe import recipe
-from endpoints.ingredients import ingredients
-from endpoints.semantic import semantic
 
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
 
 app.register_blueprint(recipe, url_prefix='/recipes')
+
+ingredients = GenericBlueprint('ingredients').getBlueprint()
 app.register_blueprint(ingredients, url_prefix='/ingredients')
-app.register_blueprint(semantic, url_prefix='/semantic')
 
 
 def main():
