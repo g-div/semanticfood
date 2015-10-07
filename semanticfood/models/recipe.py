@@ -1,18 +1,16 @@
 import config
 from utils import Timer
+from .ingredient import Ingredient
 from rdflib import Namespace, RDF, Literal, XSD, RDFS
-from rdflib.collection import Collection
-from urllib import parse
 from requests import Session
 
 FO = Namespace(config.ONTO['BBC'])
 SCHEMA = Namespace(config.ONTO['SCHEMA'])
 NUTRIENT = Namespace(config.ONTO['LIRMM'])
-LOCAL = Namespace(config.RECIPE_PREFIX)
-INGREDIENT = Namespace(config.INGREDIENT_PREFIX)
 
 
 class Recipe():
+    LOCAL = Namespace(config.RECIPE_PREFIX)
 
     """docstring for Recipe"""
 
@@ -31,13 +29,13 @@ class Recipe():
         self.ingredients = data.get('ingredient')
         self.steps = data.get('instructionStep')
 
-        self.uri = LOCAL[self.name.strip().replace(' ', '_')]
+        self.uri = self.LOCAL[self.name.strip().replace(' ', '_')]
 
     def serialize(self):
 
-        res = self._calculateNutrition()
+        res = self._serializeIngredients()
         res.extend([(self.uri, RDF.type, FO.Recipe),
-               (self.uri, RDF.type, NUTRIENT.FOOD)
+               (self.uri, RDF.type, NUTRIENT.FOOD),
                (self.uri, RDFS.label, Literal(self.name)),
                (self.uri, RDFS.comment, Literal(self.description, lang='en')),
                (self.uri, SCHEMA.prepTime, Literal(Timer(self.prepTime).isoformat(), datatype=SCHEMA.Duration)),
@@ -67,7 +65,39 @@ class Recipe():
 
         return self
 
-    def _calculateNutrition(self):
+
+    def _calculateNutrients(self, ingredient, data):
+        for nutrient in ingredient.getNutrients():
+            if nutrient.get('nutrient_id') is not 268:
+                if not data.get(nutrient.get('name')):
+                    data[nutrient.get('name')] = {'count': 0, 'unit': nutrient.get('unit')}
+                data[nutrient.get('name')]['count'] += float(nutrient.get('value'))
+        return data
+
+    def _parseNutritionTable(self, table, res):
+        # TODO: transFatContent and unsaturatedFatContent are unknown
+        for label in table:
+            if label == 'Energy':
+                res.append((self.uri, NUTRIENT.energyPer100g, Literal(table[label]['count'])))
+            elif label == 'Carbohydrate, by difference':
+                res.append((self.uri, NUTRIENT.carbohydratesPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+            elif label == 'Cholesterol':
+                res.append((self.uri, NUTRIENT.cholesterolPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+            elif label == 'Total lipid (fat)':
+                res.append((self.uri, NUTRIENT.fatPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+            elif label == 'Fiber, total dietary':
+                res.append((self.uri, NUTRIENT.fiberPer100g, Literal(table[label]['count'])))
+            elif label == 'Protein':
+                res.append((self.uri, NUTRIENT.proteinsPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+            elif label == 'Fatty acids, total saturated':
+                res.append((self.uri, NUTRIENT.saturatedFatPer100g, Literal(table[label]['count'])))
+            elif label == 'Sodium, Na':
+                res.append((self.uri, NUTRIENT.sodiumPer100g, Literal(table[label]['count'])))
+            elif label == 'Sugars, total':
+                res.append((self.uri, NUTRIENT.sugarsPer100g, Literal(table[label]['count'])))
+        return res
+
+    def _serializeIngredients(self):
         res = []
 
         session = Session()
@@ -75,47 +105,15 @@ class Recipe():
         for ingredient in self.ingredients:
 
             response = session.get(config.USDA_API.format(config.USDA_API_KEY, ingredient['food'])).json()
-            name = response.get('report').get('food').get('name')
-            nutrients = response.get('report').get('food').get('nutrients')
-            quantity = ingredient['quantity']
 
-            ingredientURI = INGREDIENT["{}g_{}".format(quantity, name.strip().replace(' ', '_'))]
-            foodURI = INGREDIENT[name.strip().replace(' ', '_')]
-            res.extend([(self.uri, FO.ingredients, ingredientURI),
-                        (ingredientURI, RDF.type, FO.Ingredient),
-                        (ingredientURI, FO.metric_quantity, Literal('{} g'.format(quantity))),
-                        (ingredientURI, FO.quantity, Literal(quantity, datatype=XSD.nonNegativeInteger)),
-                        (ingredientURI, FO.food, foodURI),
-                        (foodURI, RDF.type, FO.Food),
-                        (foodURI, RDFS.label, Literal(name))])
+            ing = Ingredient(name=response.get('report').get('food').get('name'),
+                             quantity=ingredient['quantity'],
+                             nutrients=response.get('report').get('food').get('nutrients'))
 
+            res.append((self.uri, FO.ingredients, ing.getURI()))
+            res.extend(ing.serialize())
 
-            for nutrient in nutrients:
-                if nutrient.get('nutrient_id') is not 268:
-                    if not nutritionalInformations.get(nutrient.get('name')):
-                        nutritionalInformations[nutrient.get('name')] = {'count': 0, 'unit': nutrient.get('unit')}
-                    nutritionalInformations[nutrient.get('name')]['count'] += float(nutrient.get('value')) * quantity
+            nutritionalInformations = self._calculateNutrients(ingredient=ing, data=nutritionalInformations)
 
-        # TODO: transFatContent and unsaturatedFatContent are unknow
-        raise
-        for nutritionalInformation in nutritionalInformations:
-            if nutritionalInformation == 'Energy':
-                res.append((self.uri, NUTRIENT.energyPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
-            elif nutritionalInformation == 'Carbohydrate, by difference':
-                res.append((self.uri, NUTRIENT.carbohydratesPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'], datatype=XSD.decimal)))
-            elif nutritionalInformation == 'Cholesterol':
-                res.append((self.uri, NUTRIENT.cholesterolPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'], datatype=XSD.decimal)))
-            elif nutritionalInformation == 'Total lipid (fat)':
-                res.append((self.uri, NUTRIENT.fatPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'], datatype=XSD.decimal)))
-            elif nutritionalInformation == 'Fiber, total dietary':
-                res.append((self.uri, NUTRIENT.fiberPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
-            elif nutritionalInformation == 'Protein':
-                res.append((self.uri, NUTRIENT.proteinsPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'], datatype=XSD.decimal)))
-            elif nutritionalInformation == 'Fatty acids, total saturated':
-                res.append((self.uri, NUTRIENT.saturatedFatPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
-            elif nutritionalInformation == 'Sodium, Na':
-                res.append((self.uri, NUTRIENT.sodiumPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
-            elif nutritionalInformation == 'Sugars, total':
-                res.append((self.uri, NUTRIENT.sugarsPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
-
+        res.extend(self._parseNutritionTable(nutritionalInformations, res))
         return res
