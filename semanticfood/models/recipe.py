@@ -35,7 +35,7 @@ class Recipe():
 
         res = self._serializeIngredients()
         res.extend([(self.uri, RDF.type, FO.Recipe),
-               (self.uri, RDF.type, NUTRIENT.FOOD),
+               (self.uri, RDF.type, NUTRIENT.Food),
                (self.uri, RDFS.label, Literal(self.name)),
                (self.uri, RDFS.comment, Literal(self.description, lang='en')),
                (self.uri, SCHEMA.prepTime, Literal(Timer(self.prepTime).isoformat(), datatype=SCHEMA.Duration)),

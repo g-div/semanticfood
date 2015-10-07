@@ -20,7 +20,7 @@ app.register_blueprint(Recipe, url_prefix='/recipes')
 ingredients = GenericBlueprint('ingredients').getBlueprint()
 app.register_blueprint(ingredients, url_prefix='/ingredients')
 
-@app.route('/ontology')
+@app.route('/ontology/')
 def ontology():
 	return app.send_static_file('ontology.ttl')
 
