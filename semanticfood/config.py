@@ -11,6 +11,7 @@ NS = {
     'ingredientList': '{}ingredientList/'.format(GRAPH_NAME),
     'recipes': '{}recipes/'.format(GRAPH_NAME),
     'steps': '{}steps/'.format(GRAPH_NAME),
+    'stepsSequence': '{}stepsSequence/'.format(GRAPH_NAME),
 }
 
 SPARQL_ENDPOINT = 'http://46.101.152.77:8890/sparql'
