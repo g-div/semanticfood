@@ -84,7 +84,6 @@ $(document).ready(function () {
 
         setSelectOptions({lt: 'Less than', gt: 'More than'}, opElem);
         setSelectOptions({
-                totalTime: 'Total Time',
                 prepTime: 'Preparation Time',
                 cookTime: 'Cooking Time'
             },

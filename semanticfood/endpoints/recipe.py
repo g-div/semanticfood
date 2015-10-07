@@ -108,12 +108,13 @@ def search():
 
             if filter.get('type') == 0:
                 val = filter.get('value')
-                unit = filter.get('unit')
-                operator = "<"
-                if filter.get('operator') == "gt":
-                    operator = ">"
-                whereClause += ". FILTER (?{0} {1} {2})".format(unit, operator, val)
-                selectFields += ". ?recipe food:{0} ?{0}".format(unit)
+                if (val):
+                    unit = filter.get('unit')
+                    operator = "<"
+                    if filter.get('operator') == "gt":
+                        operator = ">"
+                    whereClause += ". FILTER (?{0} {1} {2})".format(unit, operator, val)
+                    selectFields += ". ?recipe food:{0} ?{0}".format(unit)
 
             elif filter.get('type')  == 1:
                 val = filter.get('value')
@@ -126,7 +127,14 @@ def search():
                 #selectFields += ". ?recipe food:{0} ?{0}".format(unit)
 
             elif filter.get('type') == 2:
-                print(form.data)
+                val = filter.get('value')
+                if (val):
+                    unit = filter.get('unit')
+                    operator = "<"
+                    if filter.get('operator') == "gt":
+                        operator = ">"
+                    whereClause += ". FILTER (?{0} {1} {2})".format(unit, operator, val)
+                    selectFields += ". ?recipe sfo:{0} ?{0}".format(unit)
 
         query = """SELECT ?label ?Description ?recipe WHERE {
                     ?recipe a fo:Recipe .
