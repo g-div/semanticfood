@@ -21,6 +21,7 @@ class GraphWrapper():
         self.graph = Graph(store, config.GRAPH_NAME)
         self.graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
         self.graph.bind('schema', 'http://schema.org/')
+        self.graph.bind('food', 'http://data.lirmm.fr/ontologies/food/#')
 
     def getConnection(self):
         return self.graph
