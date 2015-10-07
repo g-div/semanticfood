@@ -54,8 +54,12 @@ class Recipe():
     def deserialize(self, resource):
         self.name = resource.value(RDFS.label)
         self.description = resource.value(RDFS.comment)
-        self.prepTime = resource.value(SFO.prepTime)
-        self.cookTime = resource.value(SFO.cookTime)
+        timer = Timer(resource.value(SFO.prepTime))
+        self.prepTime = timer.getString()
+        self.prepTime_iso = timer.isoformat()
+        timer = Timer(resource.value(SFO.cookTime))
+        self.cookTime = timer.getString()
+        self.cookTime_iso = timer.isoformat()
         self.servings = resource.value(FO.serves)
         self.fat = resource.value(NUTRIENT.fatPer100g) or 0
         self.saturatedFat = resource.value(NUTRIENT.saturatedFatPer100g) or 0

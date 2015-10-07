@@ -30,25 +30,27 @@ class GraphWrapper():
 
 class Timer():
 
-    """docstring for Timer"""
+    def __init__(self, minutes):
+        self.minutes, self.hours = divmod(int(minutes), 60)
 
-    def __init__(self, data):
-        self.days = data['days']
-        self.hours = data['hours']
-        self.minutes = data['minutes']
+    def getString(self):
+        if self.hours and self.minutes:
+            return '{0} hours and {1} minutes'.format(self.hours, self.minutes)
+        elif self.minutes:
+            return '{1} minutes'.format(self.minutes)
+        else:
+            return '{0} hours'.format(self.hours)
 
     def isoformat(self):
-        prepTime = 'P'
-        if self.days:
-            prepTime += '{}D'.format(self.days)
+        time = 'P'
         if self.hours or self.minutes:
-            prepTime += 'T'
+            time += 'T'
         if self.hours:
-            prepTime += '{}H'.format(self.hours)
+            time += '{}H'.format(self.hours)
         if self.minutes:
-            prepTime += '{}M'.format(self.minutes)
+            time += '{}M'.format(self.minutes)
 
-        return prepTime
+        return time
 
 
 class IngredientForm(Form):
