@@ -1,7 +1,8 @@
-@base <http://purl.org/ontology/fo/> .
+@base <http://purl.org/ontology/semanticfood/> .
 
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix fo: <http://purl.org/ontology/fo/> .
+@prefix sfo: <http://purl.org/ontology/semanticfood/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -12,16 +13,15 @@
 # General description of the schema
 ############################################################################
 
-fo:
+sfo:
 	a owl:Ontology , provenance:Ontology ;
-	dcterms:title "Food Ontology"@en-gb ;
-	rdfs:label "Food Ontology"^^xsd:string ;
+	dcterms:title "BBC Food Ontology Extension"@en-gb ;
+	rdfs:label "BBC Food Ontology Extension"^^xsd:string ;
 	rdfs:comment "Fork of the BBC Food Ontology vocabulary."@en-gb ;
 	dcterms:license <http://creativecommons.org/licenses/by/4.0#id> ;
-    owl:imports vs: , dcterms: ;
-    owl:priorVersion <http://purl.org/ontology/fo/1.0> ;
-    owl:versionIRI <http://purl.org/ontology/fo/1.1> ;
-    owl:versionInfo "1.1"^^xsd:string .
+    owl:imports fo: ;
+    owl:versionIRI <http://purl.org/ontology/semanticfood/1.0> ;
+    owl:versionInfo "1.0"^^xsd:string .
 
 
 ############################################################################
