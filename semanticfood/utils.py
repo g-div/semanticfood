@@ -62,11 +62,11 @@ class RecipeForms(Form):
 
     description = TextAreaField(description='Description')
 
-    prepTime = IntegerField(label='Preparation Time (in Minutes)',
-                            description='min.', validators=[validators.NumberRange(min=0), validators.Optional()])
+    prepTime = IntegerField(label='Preparation Time',
+                            description='Preparation Time (Minutes)', validators=[validators.NumberRange(min=0), validators.Optional()])
 
-    cookTime = IntegerField(label='Cooking Preparation Time (in Minutes)',
-                            description='min.', validators=[validators.NumberRange(min=0), validators.Optional()])
+    cookTime = IntegerField(label='Cooking Time',
+                            description='Cooking Time (Minutes)', validators=[validators.NumberRange(min=0), validators.Optional()])
 
     servings = IntegerField(description='Servings',
                             validators=[validators.NumberRange(min=1)])
