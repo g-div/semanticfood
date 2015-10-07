@@ -2,7 +2,7 @@ import config
 import json
 from rdflib import Namespace, URIRef
 from rdflib.resource import Resource
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from flask_negotiate import produces
 from flask_rdf import flask_rdf
 from utils import RecipeForms, SearchForm, getSingle, GraphWrapper
@@ -17,27 +17,34 @@ graph = GraphWrapper().getConnection()
 
 
 @recipe.route('/')
-@produces('text/html')
+@produces(
+   'application/rdf+xml',
+   'application/xml',
+   'text/html',
+   'application/json+ld',
+   'application/n-triples',
+   'text/n-triples',
+   'text/rdf+nt',
+   'application/n3',
+   'text/n3',
+   'text/rdf+n3',
+)
+@flask_rdf
 def get():
     """ GET / List all recipes"""
-    res = graph.query("""SELECT ?label ?recipe WHERE {
-                      ?recipe a fo:Recipe. 
-                      ?recipe rdfs:label ?label 
-                      }""")
-    recipes = []
-    for row in res:
-        recipes.append({'uri': row[1], 'name': row[0]})
-    return render_template('recipe/recipes.html', recipes=recipes)
-
-
-@recipe.route('/<id>.html')
-@produces('text/html')
-def getHTML(id):
-
-    entry = Resource(graph, URIRef(LOCAL[id]))
-    recipe = Recipe().deserialize(entry)
-
-    return render_template('recipe/recipe.html', recipe=recipe)
+    print(current_app)
+    if 'text/html' in request.headers.get('Accept'):
+        res = graph.query("""SELECT ?label ?recipe WHERE {
+                          ?recipe a fo:Recipe. 
+                          ?recipe rdfs:label ?label 
+                          }""")
+        recipes = []
+        for row in res:
+            recipes.append({'uri': row[1], 'name': row[0]})
+        return render_template('recipe/recipes.html', recipes=recipes)
+    elif 'application/json+ld' in request.headers.get('Accept'):
+        return graph.serialize(format='json-ld')
+    return graph
 
 
 @recipe.route('/<id>')
@@ -54,10 +61,13 @@ def getHTML(id):
    'text/rdf+n3',
 )
 @flask_rdf
-def getRDFRecipe(id):
+def getById(id):
     if 'text/html' in request.headers.get('Accept'):
-        return redirect(url_for('recipe.getHTML', id=id))
-    if 'application/json+ld' in request.headers.get('Accept'):
+        entry = Resource(graph, URIRef(LOCAL[id]))
+        recipe = Recipe().deserialize(entry)
+
+        return render_template('recipe/recipe.html', recipe=recipe)
+    elif 'application/json+ld' in request.headers.get('Accept'):
         return getSingle(graph, LOCAL, id).serialize(format='json-ld')
     return getSingle(graph, LOCAL, id)
 
