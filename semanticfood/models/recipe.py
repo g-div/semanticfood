@@ -75,7 +75,6 @@ class Recipe():
         return data
 
     def _parseNutritionTable(self, table, res):
-        # TODO: transFatContent and unsaturatedFatContent are unknown
         for label in table:
             if label == 'Energy':
                 res.append((self.uri, NUTRIENT.energyPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
@@ -91,6 +90,12 @@ class Recipe():
                 res.append((self.uri, NUTRIENT.proteinsPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
             elif label == 'Fatty acids, total saturated':
                 res.append((self.uri, NUTRIENT.saturatedFatPer100g, Literal(table[label]['count'])))
+            elif label == 'Fatty acids, total trans':
+                res.append((self.uri, NUTRIENT.transFatPer100g, Literal(table[label]['count'])))
+            elif label == 'Fatty acids, total monounsaturated':
+                res.append((self.uri, NUTRIENT.monounsaturatedFatPer100g, Literal(table[label]['count'])))
+            elif label == 'Fatty acids, total polyunsaturated':
+                res.append((self.uri, NUTRIENT.polyunsaturatedFatPer100g, Literal(table[label]['count'])))
             elif label == 'Sodium, Na':
                 res.append((self.uri, NUTRIENT.sodiumPer100g, Literal(float(table[label]['count']) / 100, datatype=XSD.decimal)))
             elif label == 'Sugars, total':
