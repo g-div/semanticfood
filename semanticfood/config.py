@@ -8,6 +8,7 @@ GRAPH_NAME = 'http://semanticfood.org/'
 
 NS = {
     'ingredients': '{}ingredients/'.format(GRAPH_NAME),
+    'ingredientList': '{}ingredientList/'.format(GRAPH_NAME),
     'recipes': '{}recipes/'.format(GRAPH_NAME),
     'steps': '{}steps/'.format(GRAPH_NAME),
 }

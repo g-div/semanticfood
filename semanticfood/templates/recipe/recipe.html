@@ -41,9 +41,11 @@
 		</div>
 		<div>
 			<h3>Instructions:</h3>
-			<span itemprop="recipeInstructions">
-				{{ recipe.instructions }}
-			</span>
+			<ul itemprop="recipeInstructions">
+				{% for step in recipe.steps %}
+				<li class="step" itemprop="step">{{ step }}</li>
+				{% endfor %}
+			</ul>
 		</div>
 	</div>
 </div>

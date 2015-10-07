@@ -1,10 +1,31 @@
 import config
+from uuid import uuid4
 from rdflib import Namespace, RDF, Literal, XSD, RDFS
 
 FO = Namespace(config.ONTO['BBC'])
 
+class IngredientList():
+    LOCAL = Namespace(config.NS['ingredientList'])
+    SFO = Namespace(config.ONTO['LOCAL'])
 
-class Ingredient(object):
+    def __init__(self, ingredients):
+        self.ingredients = ingredients
+
+        self.uri = self.LOCAL[str(uuid4())]
+
+    def serialize(self):
+        res = [(self.uri, RDF.type, FO.IngredientList)]
+        for ingredient in self.ingredients:
+            res.append((self.uri, FO.ingredients, ingredient.getURI()))
+            res.extend(ingredient.serialize())
+
+        return res
+
+    def getURI(self):
+        return self.uri
+
+
+class Ingredient():
     LOCAL = Namespace(config.NS['ingredients'])
 
     def __init__(self, name, quantity, nutrients):

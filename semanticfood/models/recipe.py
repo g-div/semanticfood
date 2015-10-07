@@ -1,6 +1,6 @@
 import config
 from utils import Timer
-from .ingredient import Ingredient
+from .ingredient import IngredientList, Ingredient
 from .step import StepSequence
 from rdflib import Namespace, RDF, Literal, XSD, RDFS
 from requests import Session
@@ -74,10 +74,16 @@ class Recipe():
         # TODO: add instructions
 
         self.ingredients = []
-        for ingredient in resource.objects(SFO.ingredients):
+        ingredientList = resource.value(SFO.ingredients)
+        for ingredient in ingredientList.objects(FO.ingredients):
             name = ingredient.value(FO.food).value(RDFS.label)
             quantity = ingredient.value(FO.metric_quantity)
             self.ingredients.append('{} {}'.format(quantity, name))
+
+        self.steps = []
+        stepList = resource.value(SFO.steps)
+        for step in stepList.objects(SFO.steps):
+            self.steps.append(step.value(FO.instruction))
 
         return self
 
@@ -123,6 +129,7 @@ class Recipe():
 
         session = Session()
         nutritionalInformations = {}
+        ingredients = []
         for ingredient in self.ingredients:
 
             response = session.get(config.USDA_API.format(config.USDA_API_KEY, ingredient['food'])).json()
@@ -131,10 +138,13 @@ class Recipe():
                              quantity=ingredient['quantity'],
                              nutrients=response.get('report').get('food').get('nutrients'))
 
-            res.append((self.uri, SFO.ingredients, ing.getURI()))
-            res.extend(ing.serialize())
-
             nutritionalInformations = self._calculateNutrients(ingredient=ing, data=nutritionalInformations)
+            ingredients.append(ing)
+
+        ingredientList = IngredientList(ingredients)
+        res.append((self.uri, SFO.ingredients, ingredientList.getURI()))
+        res.extend(ingredientList.serialize())
+
 
         res.extend(self._parseNutritionTable(nutritionalInformations, res))
         return res
