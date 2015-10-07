@@ -11,7 +11,7 @@ from models.recipe import Recipe
 
 recipe = Blueprint('recipe', __name__)
 
-LOCAL = Namespace(config.RECIPE_PREFIX)
+LOCAL = Namespace(config.NS['recipes'])
 
 graph = GraphWrapper().getConnection()
 
