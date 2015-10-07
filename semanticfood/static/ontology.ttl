@@ -28,51 +28,51 @@ sfo:
 # Classes
 ############################################################################
 
-fo:StepSequence a owl:Class ;
+sfo:StepSequence a owl:Class ;
 	rdfs:subClassOf rdf:Seq ;
 	rdfs:label "StepSequence"@en-gb ;
 	rdfs:comment "A StepSequence is a sequence (rdf:Seq) of instructions in the order they should be listed in the recipe."@en-gb ;
 	vs:term_status "testing" ;
-	rdfs:isDefinedBy fo: .
+	rdfs:isDefinedBy sfo: .
 
 
 ############################################################################
 # Object Properties
 ############################################################################
 
-fo:ingredients a owl:ObjectProperty ;
+sfo:ingredients a owl:ObjectProperty ;
 	rdfs:label "ingredients"@en-gb ;
 	rdfs:comment "The ingredients property relates a recipe or recipe stage to an ingredient list."@en-gb ;
 	rdfs:range fo:IngredientList ;
 	rdfs:domain foRecipe ;
 	vs:term_status "testing" ;
-	rdfs:isDefinedBy fo: .
+	rdfs:isDefinedBy sfo: .
 
-fo:steps a owl:ObjectProperty ;
+sfo:steps a owl:ObjectProperty ;
 	rdfs:label "steps"@en-gb ;
 	rdfs:comment "The steps necessary in order to cook a recipe."@en-gb ;
-	rdfs:range fo:StepSequence ;
+	rdfs:range sfo:StepSequence ;
 	rdfs:domain fo:Recipe ;
 	vs:term_status "testing" ;
-	rdfs:isDefinedBy fo: .
+	rdfs:isDefinedBy sfo: .
 
 
 ############################################################################
 # Datatype Properties
 ############################################################################
 
-fo:cookTime a owl:DatatypeProperty ;
+sfo:cookTime a owl:DatatypeProperty ;
 	rdfs:label "cookTime"@en-gb ;
 	rdfs:comment "The necessary time (in minutes) to cook a recipe."@en-gb ;
 	rdfs:range xsd:nonNegativeInteger ;
 	rdfs:domain fo:Recipe ;
 	vs:term_status "testing" ;
-	rdfs:isDefinedBy fo: .
+	rdfs:isDefinedBy sfo: .
 
-fo:prepTime a owl:DatatypeProperty ;
+sfo:prepTime a owl:DatatypeProperty ;
 	rdfs:label "prepTime"@en-gb ;
 	rdfs:comment "The necessary time (in minutes) to prepare a recipe."@en-gb ;
 	rdfs:range xsd:nonNegativeInteger ;
 	rdfs:domain fo:Recipe ;
 	vs:term_status "testing" ;
-	rdfs:isDefinedBy fo: .
+	rdfs:isDefinedBy sfo: .
