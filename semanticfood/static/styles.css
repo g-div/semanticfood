@@ -133,7 +133,7 @@ select {
     padding: 7px 13px 7px 10px !important;
 }
 
-.search-results > a > div {
+.search-results > a > div, .search-results > div {
     background-color: #fff;
     font-size: 18px;
     min-height: 50px;

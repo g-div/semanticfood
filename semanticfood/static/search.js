@@ -142,10 +142,13 @@ $(document).ready(function () {
             var results = $.parseJSON(data);
 
             resultBlock.empty();
-
-            $.each(results, function (count, result) {
-                resultBlock.append('<a href="/recipes/' + result.title + '"><div><h3>' + result.title + '</h3><p>' + result.description + '</p></div></a>');
-            });
+            if (results[0] != undefined) {
+                $.each(results, function (count, result) {
+                    resultBlock.append('<a href="/recipes/' + result.title + '"><div><h3>' + result.title + '</h3><p>' + result.description + '</p></div></a>');
+                });
+            } else {
+                resultBlock.append('<div><h3>No results found.</h3><p>Try some different filter parameters.</p></div>');
+            }
 
 
 
