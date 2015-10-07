@@ -19,9 +19,9 @@ class GraphWrapper():
     def __init__(self):
         store = SPARQLUpdateStore(config.SPARQL_ENDPOINT, config.SPARQL_ENDPOINT)
         self.graph = Graph(store, config.GRAPH_NAME)
-        self.graph.bind('fo', 'http://www.bbc.co.uk/ontologies/fo/')
-        self.graph.bind('food', 'http://data.lirmm.fr/ontologies/food/#')
-        self.graph.bind('sf', 'http://semanticfood.org/ontology/#')
+        self.graph.bind('fo', config.ONTO['BBC'])
+        self.graph.bind('food', config.ONTO['LIRMM'])
+        self.graph.bind('sfo', config.ONTO['LOCAL'])
 
     def getConnection(self):
         return self.graph
@@ -102,4 +102,3 @@ class Filter(Form):
 class SearchForm(Form):
     fulltextsearch = TextField()
     filter = FieldList(FormField(Filter))
-
