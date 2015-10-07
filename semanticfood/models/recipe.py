@@ -1,14 +1,13 @@
 import config
 from utils import Timer
-from rdflib import Namespace, RDF, Literal, RDFS
+from rdflib import Namespace, RDF, Literal, XSD, RDFS
 from rdflib.collection import Collection
 from urllib import parse
 from requests import Session
 
-
-
 FO = Namespace(config.ONTO['BBC'])
 SCHEMA = Namespace(config.ONTO['SCHEMA'])
+NUTRIENT = Namespace(config.ONTO['LIRMM'])
 LOCAL = Namespace(config.RECIPE_PREFIX)
 INGREDIENT = Namespace(config.INGREDIENT_PREFIX)
 
@@ -38,12 +37,12 @@ class Recipe():
 
         res = self._calculateNutrition()
         res.extend([(self.uri, RDF.type, FO.Recipe),
-               (self.uri, RDF.type, SCHEMA.Recipe),
+               (self.uri, RDF.type, NUTRIENT.FOOD)
                (self.uri, RDFS.label, Literal(self.name)),
-               (self.uri, SCHEMA.description, Literal(self.description, lang='en')),
+               (self.uri, RDFS.comment, Literal(self.description, lang='en')),
                (self.uri, SCHEMA.prepTime, Literal(Timer(self.prepTime).isoformat(), datatype=SCHEMA.Duration)),
                (self.uri, SCHEMA.cookTime, Literal(Timer(self.cookTime).isoformat(), datatype=SCHEMA.Duration)),
-               (self.uri, SCHEMA.recipeYield, Literal(self.servings))])
+               (self.uri, FO.serves, Literal(self.servings))])
 
 
         # TODO: add steps to the graph
@@ -51,12 +50,12 @@ class Recipe():
 
     def deserialize(self, resource):
         self.name = resource.value(RDFS.label)
-        self.description = resource.value(SCHEMA.description)
+        self.description = resource.value(RDFS.comment)
         self.prepTime = resource.value(SCHEMA.prepTime)
         self.cookTime = resource.value(SCHEMA.cookTime)
-        self.servings = resource.value(SCHEMA.recipeYield)
-        self.fat = resource.value(SCHEMA.fatContent)
-        self.cal = resource.value(SCHEMA.calories)
+        self.servings = resource.value(FO.serves)
+        self.fat = resource.value(NUTRIENT.fatPer100g)
+        self.cal = resource.value(NUTRIENT.energyPer100g)
 
         # TODO: add instructions
 
@@ -85,6 +84,7 @@ class Recipe():
             res.extend([(self.uri, FO.ingredients, ingredientURI),
                         (ingredientURI, RDF.type, FO.Ingredient),
                         (ingredientURI, FO.metric_quantity, Literal('{} g'.format(quantity))),
+                        (ingredientURI, FO.quantity, Literal(quantity, datatype=XSD.nonNegativeInteger)),
                         (ingredientURI, FO.food, foodURI),
                         (foodURI, RDF.type, FO.Food),
                         (foodURI, RDFS.label, Literal(name))])
@@ -97,24 +97,25 @@ class Recipe():
                     nutritionalInformations[nutrient.get('name')]['count'] += float(nutrient.get('value')) * quantity
 
         # TODO: transFatContent and unsaturatedFatContent are unknow
+        raise
         for nutritionalInformation in nutritionalInformations:
             if nutritionalInformation == 'Energy':
-                res.append((self.uri, SCHEMA.calories, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Energy)))
+                res.append((self.uri, NUTRIENT.energyPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
             elif nutritionalInformation == 'Carbohydrate, by difference':
-                res.append((self.uri, SCHEMA.carbohydrateContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
+                res.append((self.uri, NUTRIENT.carbohydratesPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'], datatype=XSD.decimal)))
             elif nutritionalInformation == 'Cholesterol':
-                res.append((self.uri, SCHEMA.cholesterolContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
+                res.append((self.uri, NUTRIENT.cholesterolPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'], datatype=XSD.decimal)))
             elif nutritionalInformation == 'Total lipid (fat)':
-                res.append((self.uri, SCHEMA.fatContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
+                res.append((self.uri, NUTRIENT.fatPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'], datatype=XSD.decimal)))
             elif nutritionalInformation == 'Fiber, total dietary':
-                res.append((self.uri, SCHEMA.fiberContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
+                res.append((self.uri, NUTRIENT.fiberPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
             elif nutritionalInformation == 'Protein':
-                res.append((self.uri, SCHEMA.proteinContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
+                res.append((self.uri, NUTRIENT.proteinsPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'], datatype=XSD.decimal)))
             elif nutritionalInformation == 'Fatty acids, total saturated':
-                res.append((self.uri, SCHEMA.saturatedFatContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
+                res.append((self.uri, NUTRIENT.saturatedFatPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
             elif nutritionalInformation == 'Sodium, Na':
-                res.append((self.uri, SCHEMA.sodiumContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
+                res.append((self.uri, NUTRIENT.sodiumPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
             elif nutritionalInformation == 'Sugars, total':
-                res.append((self.uri, SCHEMA.sugarContent, Literal('{} {}'.format(nutritionalInformations[nutritionalInformation]['count'], nutritionalInformations[nutritionalInformation]['unit']), datatype=SCHEMA.Mass)))
+                res.append((self.uri, NUTRIENT.sugarsPer100g, Literal(nutritionalInformations[nutritionalInformation]['count'])))
 
         return res
