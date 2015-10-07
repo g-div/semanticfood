@@ -78,23 +78,23 @@ class Recipe():
         # TODO: transFatContent and unsaturatedFatContent are unknown
         for label in table:
             if label == 'Energy':
-                res.append((self.uri, NUTRIENT.energyPer100g, Literal(table[label]['count'])))
+                res.append((self.uri, NUTRIENT.energyPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
             elif label == 'Carbohydrate, by difference':
                 res.append((self.uri, NUTRIENT.carbohydratesPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
             elif label == 'Cholesterol':
-                res.append((self.uri, NUTRIENT.cholesterolPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.cholesterolPer100g, Literal(float(table[label]['count']) * 100, datatype=XSD.decimal)))
             elif label == 'Total lipid (fat)':
                 res.append((self.uri, NUTRIENT.fatPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
             elif label == 'Fiber, total dietary':
-                res.append((self.uri, NUTRIENT.fiberPer100g, Literal(table[label]['count'])))
+                res.append((self.uri, NUTRIENT.fiberPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
             elif label == 'Protein':
                 res.append((self.uri, NUTRIENT.proteinsPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
             elif label == 'Fatty acids, total saturated':
                 res.append((self.uri, NUTRIENT.saturatedFatPer100g, Literal(table[label]['count'])))
             elif label == 'Sodium, Na':
-                res.append((self.uri, NUTRIENT.sodiumPer100g, Literal(table[label]['count'])))
+                res.append((self.uri, NUTRIENT.sodiumPer100g, Literal(float(table[label]['count']) * 100, datatype=XSD.decimal)))
             elif label == 'Sugars, total':
-                res.append((self.uri, NUTRIENT.sugarsPer100g, Literal(table[label]['count'])))
+                res.append((self.uri, NUTRIENT.sugarsPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
         return res
 
     def _serializeIngredients(self):
