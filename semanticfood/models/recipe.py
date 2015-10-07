@@ -93,29 +93,29 @@ class Recipe():
     def _parseNutritionTable(self, table, res):
         for label in table:
             if label == 'Energy':
-                res.append((self.uri, NUTRIENT.energyPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.energyPer100g, Literal(round(table[label]['count']), datatype=XSD.decimal)))
             elif label == 'Carbohydrate, by difference':
-                res.append((self.uri, NUTRIENT.carbohydratesPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.carbohydratesPer100g, Literal(round(table[label]['count'], 2), datatype=XSD.decimal)))
             elif label == 'Cholesterol':
-                res.append((self.uri, NUTRIENT.cholesterolPer100g, Literal(float(table[label]['count']) / 100, datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.cholesterolPer100g, Literal(round(float(table[label]['count']), 2) / 100, datatype=XSD.decimal)))
             elif label == 'Total lipid (fat)':
-                res.append((self.uri, NUTRIENT.fatPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.fatPer100g, Literal(round(table[label]['count'], 2), datatype=XSD.decimal)))
             elif label == 'Fiber, total dietary':
-                res.append((self.uri, NUTRIENT.fiberPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.fiberPer100g, Literal(round(table[label]['count'], 2), datatype=XSD.decimal)))
             elif label == 'Protein':
-                res.append((self.uri, NUTRIENT.proteinsPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.proteinsPer100g, Literal(round(table[label]['count'], 2), datatype=XSD.decimal)))
             elif label == 'Fatty acids, total saturated':
-                res.append((self.uri, NUTRIENT.saturatedFatPer100g, Literal(table[label]['count'])))
+                res.append((self.uri, NUTRIENT.saturatedFatPer100g, Literal(round(table[label]['count'], 2))))
             elif label == 'Fatty acids, total trans':
-                res.append((self.uri, NUTRIENT.transFatPer100g, Literal(table[label]['count'])))
+                res.append((self.uri, NUTRIENT.transFatPer100g, Literal(round(table[label]['count'], 2))))
             elif label == 'Fatty acids, total monounsaturated':
-                res.append((self.uri, NUTRIENT.monounsaturatedFatPer100g, Literal(table[label]['count'])))
+                res.append((self.uri, NUTRIENT.monounsaturatedFatPer100g, Literal(round(table[label]['count'], 2))))
             elif label == 'Fatty acids, total polyunsaturated':
-                res.append((self.uri, NUTRIENT.polyunsaturatedFatPer100g, Literal(table[label]['count'])))
+                res.append((self.uri, NUTRIENT.polyunsaturatedFatPer100g, Literal(round(table[label]['count'], 2))))
             elif label == 'Sodium, Na':
-                res.append((self.uri, NUTRIENT.sodiumPer100g, Literal(float(table[label]['count']) / 100, datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.sodiumPer100g, Literal(round(float(table[label]['count']), 2) / 100, datatype=XSD.decimal)))
             elif label == 'Sugars, total':
-                res.append((self.uri, NUTRIENT.sugarsPer100g, Literal(table[label]['count'], datatype=XSD.decimal)))
+                res.append((self.uri, NUTRIENT.sugarsPer100g, Literal(round(table[label]['count'], 2), datatype=XSD.decimal)))
         return res
 
     def _serializeIngredients(self):
