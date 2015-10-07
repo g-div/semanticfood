@@ -59,7 +59,7 @@ class Recipe():
         self.servings = resource.value(FO.serves)
         self.fat = resource.value(NUTRIENT.fatPer100g) or 0
         self.saturatedFat = resource.value(NUTRIENT.saturatedFatPer100g) or 0
-        self.unsaturatedFat = float(resource.value(NUTRIENT.monounsaturatedFatPer100g) or 0) + float(resource.value(NUTRIENT.polyunsaturatedFatPer100g) or 0)
+        self.unsaturatedFat = round(float(resource.value(NUTRIENT.monounsaturatedFatPer100g) or 0) + float(resource.value(NUTRIENT.polyunsaturatedFatPer100g) or 0), 2)
         self.monounsaturatedFat = resource.value(NUTRIENT.monounsaturatedFatPer100g) or 0
         self.polyunsaturatedFat = resource.value(NUTRIENT.polyunsaturatedFatPer100g) or 0
         self.transFat = resource.value(NUTRIENT.transFatPer100g) or 0
