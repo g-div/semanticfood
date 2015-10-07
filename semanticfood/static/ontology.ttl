@@ -44,7 +44,7 @@ sfo:ingredients a owl:ObjectProperty ;
 	rdfs:label "ingredients"@en-gb ;
 	rdfs:comment "The ingredients property relates a recipe or recipe stage to an ingredient list."@en-gb ;
 	rdfs:range fo:IngredientList ;
-	rdfs:domain foRecipe ;
+	rdfs:domain fo:Recipe ;
 	vs:term_status "testing" ;
 	rdfs:isDefinedBy sfo: .
 

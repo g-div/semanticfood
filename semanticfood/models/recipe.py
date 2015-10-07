@@ -1,6 +1,7 @@
 import config
 from utils import Timer
 from .ingredient import Ingredient
+from .step import StepSequence
 from rdflib import Namespace, RDF, Literal, XSD, RDFS
 from requests import Session
 
@@ -27,16 +28,18 @@ class Recipe():
         self.cookTime = data.get('cookTime')
         self.servings = data.get('servings')
         self.ingredients = data.get('ingredient')
-        self.steps = data.get('instructionStep')
+        self.steps = StepSequence(steps=data.get('instructionStep'))
 
         self.uri = self.LOCAL[self.name.strip().replace(' ', '_')]
 
     def serialize(self):
 
         res = self._serializeIngredients()
+        res.extend(self.steps.serialize())
         res.extend([(self.uri, RDF.type, FO.Recipe),
                (self.uri, RDF.type, NUTRIENT.Food),
                (self.uri, RDF.type, SFO.Recipe),
+               (self.uri, SFO.steps, self.steps.getURI()),
                (self.uri, RDFS.label, Literal(self.name)),
                (self.uri, RDFS.comment, Literal(self.description, lang='en')),
                (self.uri, SFO.prepTime, Literal(self.prepTime, datatype=XSD.integer)),

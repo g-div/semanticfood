@@ -17,7 +17,8 @@ def getSingle(graph, ns, id):
 class GraphWrapper():
 
     def __init__(self):
-        store = SPARQLUpdateStore(config.SPARQL_ENDPOINT, config.SPARQL_ENDPOINT)
+        store = SPARQLUpdateStore(
+            config.SPARQL_ENDPOINT, config.SPARQL_ENDPOINT)
         self.graph = Graph(store, config.GRAPH_NAME)
         self.graph.bind('fo', config.ONTO['BBC'])
         self.graph.bind('food', config.ONTO['LIRMM'])
@@ -50,18 +51,6 @@ class Timer():
         return prepTime
 
 
-class TimeForm(Form):
-    days = IntegerField(description='Days',
-                        validators=[validators.NumberRange(min=0),
-                                    validators.Optional()])
-    hours = IntegerField(description='Hours',
-                         validators=[validators.NumberRange(min=0),
-                                     validators.Optional()])
-    minutes = IntegerField(description='Minutes',
-                           validators=[validators.NumberRange(min=0),
-                                       validators.Optional()])
-
-
 class IngredientForm(Form):
     food = TextAreaField()
     quantity = IntegerField(validators=[validators.NumberRange(min=1)])
@@ -73,18 +62,17 @@ class RecipeForms(Form):
 
     description = TextAreaField(description='Description')
 
-    prepTime = FormField(TimeForm,
-                         label='Preparation Time (in Minutes)',
-                         description='Preparation Time (in Minutes)')
+    prepTime = IntegerField(label='Preparation Time (in Minutes)',
+                            description='min.', validators=[validators.NumberRange(min=0), validators.Optional()])
 
-    cookTime = FormField(TimeForm,
-                         label='Cooking Time Time (in Minutes)',
-                         description='Cooking Time Time (in Minutes)')
+    cookTime = IntegerField(label='Cooking Preparation Time (in Minutes)',
+                            description='min.', validators=[validators.NumberRange(min=0), validators.Optional()])
 
     servings = IntegerField(description='Servings',
                             validators=[validators.NumberRange(min=1)])
 
-    ingredient = FieldList(FormField(IngredientForm), description='Ingredients')
+    ingredient = FieldList(
+        FormField(IngredientForm), description='Ingredients')
 
     instructionStep = FieldList(TextAreaField(description='Describe the first step'),
                                 min_entries=1)

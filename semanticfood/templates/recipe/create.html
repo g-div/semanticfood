@@ -18,16 +18,12 @@
 
 	    <div id="prepTime">
 	    	<p>{{ form.prepTime.label }}:</p>
-		    {{ form.prepTime.days(class="time", placeholder=form.prepTime.days.description, type="number") }}
-		    {{ form.prepTime.hours(class="time", placeholder=form.prepTime.hours.description, type="number") }}
-		    {{ form.prepTime.minutes(required=True, class="time", placeholder=form.prepTime.minutes.description, type="number") }}
+		    {{ form.prepTime(required=True, class="time", placeholder=form.prepTime.description, type="number") }}
 	    </div>
 
 	    <div id="cookTime">
 	    	<p>{{ form.cookTime.label }}:</p>
-		    {{ form.cookTime.days(class="time", placeholder=form.cookTime.days.description, type="number") }}
-		    {{ form.cookTime.hours(class="time", placeholder=form.cookTime.hours.description, type="number") }}
-		    {{ form.cookTime.minutes(required=True, class="time", placeholder=form.cookTime.minutes.description, type="number") }}
+		    {{ form.cookTime(required=True, class="time", placeholder=form.cookTime.description, type="number") }}
 	    </div>
 
 	    <div>{{ form.servings(placeholder=form.servings.description, type="number") }}</div>
