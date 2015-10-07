@@ -57,19 +57,19 @@ class Recipe():
         self.prepTime = resource.value(SFO.prepTime)
         self.cookTime = resource.value(SFO.cookTime)
         self.servings = resource.value(FO.serves)
-        self.fat = resource.value(NUTRIENT.fatPer100g)
-        self.saturatedFat = resource.value(NUTRIENT.saturatedFatPer100g)
-        self.unsaturatedFat = resource.value(NUTRIENT.monounsaturatedFatPer100g) + resource.value(NUTRIENT.polyunsaturatedFatPer100g)
-        self.monounsaturatedFat = resource.value(NUTRIENT.monounsaturatedFatPer100g)
-        self.polyunsaturatedFat = resource.value(NUTRIENT.polyunsaturatedFatPer100g)
-        self.transFat = resource.value(NUTRIENT.transFatPer100g)
-        self.calories = resource.value(NUTRIENT.energyPer100g)
-        self.proteins = resource.value(NUTRIENT.proteinsPer100g)
-        self.carbohydrates = resource.value(NUTRIENT.carbohydratesPer100g)
-        self.cholesterol = resource.value(NUTRIENT.cholesterolPer100g)
-        self.sodium = resource.value(NUTRIENT.sodiumPer100g)
-        self.fibers = resource.value(NUTRIENT.fiberPer100g)
-        self.sugars = resource.value(NUTRIENT.sugarsPer100g)
+        self.fat = resource.value(NUTRIENT.fatPer100g) or 0
+        self.saturatedFat = resource.value(NUTRIENT.saturatedFatPer100g) or 0
+        self.unsaturatedFat = resource.value(NUTRIENT.monounsaturatedFatPer100g) + resource.value(NUTRIENT.polyunsaturatedFatPer100g) or 0
+        self.monounsaturatedFat = resource.value(NUTRIENT.monounsaturatedFatPer100g) or 0
+        self.polyunsaturatedFat = resource.value(NUTRIENT.polyunsaturatedFatPer100g) or 0
+        self.transFat = resource.value(NUTRIENT.transFatPer100g) or 0
+        self.calories = resource.value(NUTRIENT.energyPer100g) or 0
+        self.proteins = resource.value(NUTRIENT.proteinsPer100g) or 0
+        self.carbohydrates = resource.value(NUTRIENT.carbohydratesPer100g) or 0
+        self.cholesterol = resource.value(NUTRIENT.cholesterolPer100g) or 0
+        self.sodium = resource.value(NUTRIENT.sodiumPer100g) or 0
+        self.fibers = resource.value(NUTRIENT.fiberPer100g) or 0
+        self.sugars = resource.value(NUTRIENT.sugarsPer100g) or 0
 
         # TODO: add instructions
 
