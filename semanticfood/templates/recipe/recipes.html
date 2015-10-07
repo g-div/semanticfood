@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>SemanticFood</title>
+	<title>All Recipies - SemanticFood</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
+<div id="wrapper">
 	<h1>SemanticFood</h1>
-
-	<ul id="recipes">
-	{% for recipe in recipes %}
-		<li class="recipe"><a href="{{ recipe.uri }}">{{ recipe.name }}</a></li>
-	{% endfor %}
-	</ul>
-
+	<div class="search-results">
+		{% for recipe in recipes %}
+		<a href="{{ recipe.url }}"><div><h3>{{ recipe.name }}</h3><p>{{ recipe.description }}</p></div></a>
+		{% endfor %}
+	</div>
+</div>
 </body>
-
 </html>

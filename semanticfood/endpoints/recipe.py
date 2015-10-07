@@ -33,13 +33,14 @@ graph = GraphWrapper().getConnection()
 def get():
     """ GET / List all recipes"""
     if 'text/html' in request.headers.get('Accept'):
-        res = graph.query("""SELECT ?label ?recipe WHERE {
-                          ?recipe a fo:Recipe. 
-                          ?recipe rdfs:label ?label 
+        res = graph.query("""SELECT ?label ?Description ?recipe WHERE {
+                          ?recipe a fo:Recipe .
+                          ?recipe rdfs:label ?label .
+                          ?recipe rdfs:comment ?Description
                           }""")
         recipes = []
         for row in res:
-            recipes.append({'uri': row[1], 'name': row[0]})
+            recipes.append({'uri': row[2], 'name': row[0], "description": row[1], "url": row[0].strip().replace(' ', '_')})
         return render_template('recipe/recipes.html', recipes=recipes)
     elif 'application/json+ld' in request.headers.get('Accept'):
         return graph.serialize(format='json-ld')
@@ -140,7 +141,7 @@ def search():
 
         i = 0;
         for row in result:
-            searchResults[i] = {"title": row[0], "description": row[1], "uri": row[2]}
+            searchResults[i] = {"title": row[0], "description": row[1], "url": row[0].strip().replace(' ', '_')}
             i+=1
         return json.dumps(searchResults)
     else:
