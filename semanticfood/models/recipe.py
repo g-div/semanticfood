@@ -5,12 +5,12 @@ from rdflib import Namespace, RDF, Literal, XSD, RDFS
 from requests import Session
 
 FO = Namespace(config.ONTO['BBC'])
-SCHEMA = Namespace(config.ONTO['SCHEMA'])
 NUTRIENT = Namespace(config.ONTO['LIRMM'])
+SF = Namespace(config.ONTO['LOCAL'])
 
 
 class Recipe():
-    LOCAL = Namespace(config.RECIPE_PREFIX)
+    LOCAL = Namespace(config.NS['recipes'])
 
     """docstring for Recipe"""
 
@@ -36,10 +36,11 @@ class Recipe():
         res = self._serializeIngredients()
         res.extend([(self.uri, RDF.type, FO.Recipe),
                (self.uri, RDF.type, NUTRIENT.Food),
+               (self.uri, RDF.type, SF.Recipe),
                (self.uri, RDFS.label, Literal(self.name)),
                (self.uri, RDFS.comment, Literal(self.description, lang='en')),
-               (self.uri, SCHEMA.prepTime, Literal(Timer(self.prepTime).isoformat(), datatype=SCHEMA.Duration)),
-               (self.uri, SCHEMA.cookTime, Literal(Timer(self.cookTime).isoformat(), datatype=SCHEMA.Duration)),
+               (self.uri, SF.prepTime, Literal(self.prepTime, datatype=XSD.integer)),
+               (self.uri, SF.cookTime, Literal(self.cookTime, datatype=XSD.integer)),
                (self.uri, FO.serves, Literal(self.servings))])
 
 
@@ -49,8 +50,8 @@ class Recipe():
     def deserialize(self, resource):
         self.name = resource.value(RDFS.label)
         self.description = resource.value(RDFS.comment)
-        self.prepTime = resource.value(SCHEMA.prepTime)
-        self.cookTime = resource.value(SCHEMA.cookTime)
+        self.prepTime = resource.value(SF.prepTime)
+        self.cookTime = resource.value(SF.cookTime)
         self.servings = resource.value(FO.serves)
         self.fat = resource.value(NUTRIENT.fatPer100g)
         self.cal = resource.value(NUTRIENT.energyPer100g)
@@ -58,7 +59,7 @@ class Recipe():
         # TODO: add instructions
 
         self.ingredients = []
-        for ingredient in resource.objects(FO.ingredients):
+        for ingredient in resource.objects(SF.ingredients):
             name = ingredient.value(FO.food).value(RDFS.label)
             quantity = ingredient.value(FO.metric_quantity)
             self.ingredients.append('{} {}'.format(quantity, name))
@@ -115,7 +116,7 @@ class Recipe():
                              quantity=ingredient['quantity'],
                              nutrients=response.get('report').get('food').get('nutrients'))
 
-            res.append((self.uri, FO.ingredients, ing.getURI()))
+            res.append((self.uri, SF.ingredients, ing.getURI()))
             res.extend(ing.serialize())
 
             nutritionalInformations = self._calculateNutrients(ingredient=ing, data=nutritionalInformations)
