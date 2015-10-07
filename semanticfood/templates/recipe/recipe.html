@@ -12,8 +12,9 @@
 		<div>
 			<p><span itemprop="description">{{ recipe.description }}</span></p>
 			<p>
-				Prep Time: <meta itemprop="prepTime" content="{{ recipe.prepTime }}">{{ recipe.prepTime }}<br>
-				Cook time: <meta itemprop="cookTime" content="{{ recipe.cookTime }}">{{ recipe.cookTime }}
+				<span itemprop="recipeYield">{{ recipe.servings }} Servings</span><br>
+				Preparation Time: <meta itemprop="prepTime" content="{{ recipe.prepTime }}">{{ recipe.prepTime }} minutes<br>
+				Cooking Time: <meta itemprop="cookTime" content="{{ recipe.cookTime }}">{{ recipe.cookTime }} minutes
 			</p>
 		</div>
 		<div class="nutrition" itemprop="nutrition" itemscope itemtype="http://schema.org/NutritionInformation">
@@ -41,9 +42,10 @@
 		</div>
 		<div>
 			<h3>Instructions:</h3>
-			<ul itemprop="recipeInstructions">
+			<ul itemtype="http://schema.org/ItemList" itemprop="recipeInstructions">
+				<meta itemprop="itemListOrder" content="http://schema.org/ItemListOrderAscending" />
 				{% for step in recipe.steps %}
-				<li class="step" itemprop="step">{{ step }}</li>
+				<li itemprop="itemListElement">{{ step }}</li>
 				{% endfor %}
 			</ul>
 		</div>

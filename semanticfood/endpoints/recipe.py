@@ -129,8 +129,6 @@ def search():
                     }
                     FILTER (!BOUND(?filterlabel))"""
 
-
-
             elif filter.get('type') == 2:
                 val = filter.get('value')
                 if (val):
