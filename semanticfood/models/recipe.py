@@ -87,7 +87,7 @@ class Recipe():
             if nutrient.get('nutrient_id') is not 268:
                 if not data.get(nutrient.get('name')):
                     data[nutrient.get('name')] = {'count': 0, 'unit': nutrient.get('unit')}
-                data[nutrient.get('name')]['count'] += float(nutrient.get('value'))
+                data[nutrient.get('name')]['count'] += ingredient.quantity / 100 * float(nutrient.get('value'))
         return data
 
     def _parseNutritionTable(self, table, res):
