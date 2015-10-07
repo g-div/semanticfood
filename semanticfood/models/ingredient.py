@@ -3,6 +3,7 @@ from rdflib import Namespace, RDF, Literal, XSD, RDFS
 
 FO = Namespace(config.ONTO['BBC'])
 
+
 class Ingredient(object):
     LOCAL = Namespace(config.NS['ingredients'])
 
