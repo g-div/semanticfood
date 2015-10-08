@@ -5,6 +5,14 @@ from rdflib.plugins.stores.sparqlstore import SPARQLUpdateStore
 
 
 def getSingle(graph, ns, id):
+    """
+    This function is used by the most endpoints (e.g.: GenericBlueprint)
+    to get all predicates and objects related to the given id.
+
+    :param graph: the graph with data
+    :ns ns: the namespace of the resource
+    :id id: the id of the resource
+    """
     tmpGraph = Graph()
 
     entry = URIRef(ns[id])
@@ -15,6 +23,10 @@ def getSingle(graph, ns, id):
 
 
 class GraphWrapper():
+    """
+    A small utility class to wrap the connection of the
+    RDFlib Graph
+    """
 
     def __init__(self):
         store = SPARQLUpdateStore(
@@ -29,17 +41,19 @@ class GraphWrapper():
 
 
 class Timer():
+    """
+    A small utility class to convert minutes in ISO 8601
+    and to an human readable string
+    """
 
     def __init__(self, minutes):
         self.minutes, self.hours = divmod(int(minutes), 60)
 
     def getString(self):
-        if self.hours and self.minutes:
-            return '{0} hours and {1} minutes'.format(self.hours, self.minutes)
-        elif self.minutes:
-            return '{1} minutes'.format(self.minutes)
+        if self.hours:
+            return '{0} hours and {1} minutes'.format(self.minutes, self.hours)
         else:
-            return '{0} hours'.format(self.hours)
+            return '{1} minutes'.format(self.minutes)
 
     def isoformat(self):
         time = 'P'
