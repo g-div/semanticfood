@@ -32,7 +32,7 @@ pip install git+https://github.com/g-div/semanticfood
 semanticfood
 ```
 
-This will start the [Flask](http://flask.pocoo.org/)-based server on port 5000.
+This will start the [Flask](http://flask.pocoo.org/)-based server on port 8000.
 
 Documentation
 =============
@@ -47,10 +47,3 @@ The source is located in the [docs](https://github.com/g-div/semanticfood/tree/m
 
 Or ```make latexpdf``` to render a PDF.
 
-
-TODOs
-=====
-
-- [ ] Code
-- [ ] Tests
-- [ ] Logo
