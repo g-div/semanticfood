@@ -19,16 +19,14 @@ You will need the following software installed:
 git clone https://github.com/g-div/semanticfood
 cd semanticfood
 python setup.py install
+
+python semanticfood/app.py
 ```
 
 #### - Deployment
 ```
 pip install git+https://github.com/g-div/semanticfood
-```
 
-### Run:
-
-```
 semanticfood
 ```
 
@@ -36,8 +34,6 @@ This will start the [Flask](http://flask.pocoo.org/)-based server on port 8000.
 
 Documentation
 =============
-
-The documentation is available at [https://semantic-food.readthedocs.org](https://semantic-food.readthedocs.org).
 
 The source is located in the [docs](https://github.com/g-div/semanticfood/tree/master/docs) folder and can be built using [Sphinx](http://sphinx-doc.org/):
 
