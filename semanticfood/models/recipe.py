@@ -11,9 +11,14 @@ SFO = Namespace(config.ONTO['LOCAL'])
 
 
 class Recipe():
-    LOCAL = Namespace(config.NS['recipes'])
+    """
+    This is the main class of the application and it's used
+    to convert new recipes in RDF triples (using serialize()) and
+    to convert results from RDF triples to Python objects (using deserialize())
 
-    """docstring for Recipe"""
+    """
+
+    LOCAL = Namespace(config.NS['recipes'])
 
     def __init__(self, data={'name': '',
                              'description': '',
@@ -33,6 +38,7 @@ class Recipe():
         self.uri = self.LOCAL[self.name.strip().replace(' ', '_')]
 
     def serialize(self):
+        """Convert a recipe to triples"""
 
         res = self._serializeIngredients()
         self.steps = StepSequence(steps=self.steps)
@@ -47,11 +53,11 @@ class Recipe():
                (self.uri, SFO.cookTime, Literal(self.cookTime, datatype=XSD.integer)),
                (self.uri, FO.serves, Literal(self.servings))])
 
-
-        # TODO: add steps to the graph
         return res
 
     def deserialize(self, resource):
+        """Convert triples to recipe object"""
+
         self.name = resource.value(RDFS.label)
         self.description = resource.value(RDFS.comment)
         timer = Timer(resource.value(SFO.prepTime))
@@ -93,6 +99,7 @@ class Recipe():
 
 
     def _calculateNutrients(self, ingredient, data):
+        """Add nutrient values of each ingredient"""
         for nutrient in ingredient.getNutrients():
             if nutrient.get('nutrient_id') is not 268:
                 if not data.get(nutrient.get('name')):
@@ -101,6 +108,7 @@ class Recipe():
         return data
 
     def _parseNutritionTable(self, table, res):
+        """Parse the USDA API results"""
         for label in table:
             if label == 'Energy':
                 res.append((self.uri, NUTRIENT.energyPer100g, Literal(round(table[label]['count']), datatype=XSD.decimal)))
@@ -129,6 +137,7 @@ class Recipe():
         return res
 
     def _serializeIngredients(self):
+        """Convert children ingredients in triples"""
         res = []
 
         session = Session()

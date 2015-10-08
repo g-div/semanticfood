@@ -14,6 +14,14 @@ You will need the following software installed:
 
 ### Installation:
 
+#### - Development
+```
+git clone https://github.com/g-div/semanticfood
+cd semanticfood
+python setup.py install
+```
+
+#### - Deployment
 ```
 pip install git+https://github.com/g-div/semanticfood
 ```

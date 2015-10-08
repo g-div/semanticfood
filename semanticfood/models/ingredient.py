@@ -5,6 +5,10 @@ from rdflib import Namespace, RDF, Literal, XSD, RDFS
 FO = Namespace(config.ONTO['BBC'])
 
 class IngredientList():
+    """
+    This class is used for the object-serialization of the class ingredientList_
+    .. _ingredientList: http://www.bbc.co.uk/ontologies/fo#terms_IngredientList
+    """
     LOCAL = Namespace(config.NS['ingredientList'])
     SFO = Namespace(config.ONTO['LOCAL'])
 
@@ -26,6 +30,10 @@ class IngredientList():
 
 
 class Ingredient():
+    """
+    This class is used for the object-serialization of the class Ingredient_
+    .. _Ingredient: http://www.bbc.co.uk/ontologies/fo#terms_Ingredient
+    """
     LOCAL = Namespace(config.NS['ingredients'])
 
     def __init__(self, name, quantity, nutrients):

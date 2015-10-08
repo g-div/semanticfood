@@ -1,3 +1,9 @@
+"""
+semanticfood.endpoints
+~~~~~~~~~~~~~~~
+This module contains the accessible HTTP endpoints for our project
+"""
+
 import config
 from .recipe import recipe
 from rdflib import Namespace
@@ -10,8 +16,18 @@ Recipe = recipe
 
 
 class GenericBlueprint():
+    """
+    This is the implementation of a generic HTTP endpoint, which 
+    can be used to expose RDF resources in different serializations
+    formats.
+    """
 
     def __init__(self, name):
+        """
+        Create the Flask Blueprint object and connect to the RDF graph
+
+        :param name: the name of the resource-type (e.g.: ingredients)
+        """
         self.route = Blueprint(name, __name__)
 
         LOCAL = Namespace(config.NS[name])

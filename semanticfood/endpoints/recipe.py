@@ -31,7 +31,13 @@ graph = GraphWrapper().getConnection()
 )
 @flask_rdf
 def get():
-    """ GET / List all recipes"""
+    """ 
+    GET / List all recipes
+
+    Return a list of all saved recipes depending on the requested MIME-type.
+    Render a template with Microdata if text/html is requested.
+
+    """
     if 'text/html' in request.headers.get('Accept'):
         res = graph.query("""SELECT ?label ?Description ?recipe WHERE {
                           ?recipe a fo:Recipe .
@@ -62,6 +68,14 @@ def get():
 )
 @flask_rdf
 def getById(id):
+    """
+    GET /<id>
+
+    Return a single recipe depending on the requested MIME-type.
+    Render a template with Microdata if text/html is requested.
+    
+    :param id: the id of the requested resource
+    """
     if 'text/html' in request.headers.get('Accept'):
         entry = Resource(graph, URIRef(LOCAL[id]))
         recipe = Recipe().deserialize(entry)
@@ -75,7 +89,11 @@ def getById(id):
 @recipe.route('/create', methods=['GET', 'POST'])
 @produces('text/html')
 def create():
-    # TODO: add tooltips based on schema.org description
+    """
+    Render a template with forms to create a new recipe
+    Only text/html representation
+    """
+
     form = RecipeForms(request.form)
 
     if request.method == 'POST' and form.validate():
@@ -93,6 +111,24 @@ def create():
 
 @recipe.route('/search', methods=['GET', 'POST'])
 def search():
+    """
+
+    Render a template with forms to search recipes.
+    The search is implemented using a SPARQL query like:
+
+    SELECT DISTINCT ?label ?Description ?recipe WHERE {
+      ?recipe a fo:Recipe .
+      ?recipe rdfs:label ?label .
+      ?recipe rdfs:comment ?Description
+      . FILTER regex(str(?label),'Pizza','i')
+      . OPTIONAL {
+        ?a rdfs:label ?filterlabel .
+        FILTER (regex(str(?filterlabel),'Pineapple','i'))
+      }
+      FILTER (!BOUND(?filterlabel))
+    }
+
+    """
     form = SearchForm(request.form)
 
     if request.method == 'POST' and form.validate():

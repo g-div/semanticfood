@@ -4,6 +4,14 @@ from rdflib import Namespace, RDF, Literal
 
 
 class StepSequence():
+    """ 
+    A StepSequence is a sequence of steps necessary to cook the recipe.
+    a Step_ is defined by the BBC Food ontology, but it doesn't have parents
+    nodes, so we extended the ontology with some others definitions located in
+    our ontology_
+    .. _ontology: /ontology/
+    .. _Step: http://www.bbc.co.uk/ontologies/fo#Step
+    """
     LOCAL = Namespace(config.NS['stepsSequence'])
     SFO = Namespace(config.ONTO['LOCAL'])
 
@@ -26,6 +34,10 @@ class StepSequence():
 
 
 class Step():
+    """
+    This class is used to generate triples according to the Step_ definition
+    .. _Step: http://www.bbc.co.uk/ontologies/fo#Step
+    """
     LOCAL = Namespace(config.NS['steps'])
     FO = Namespace(config.ONTO['BBC'])
 
